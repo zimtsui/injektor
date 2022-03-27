@@ -19,17 +19,37 @@ const BLike = {};
 
 test('simple', async t => {
 	const container = new Container();
-	class A implements ALike {
+	class A {
 		@inject(BLike)
 		public b!: BLike;
 	}
-	class B implements BLike {
-	}
+	class B implements BLike { }
 
-	container.register(ALike, () => new A());
 	container.register(BLike, () => new B());
-	const a = container.initiate<ALike>(ALike);
-	assert(a.b);
+	const a1 = container.inject(new A());
+	const a2 = container.inject(new A());
+
+	assert(a1.b);
+	assert(a2.b);
+	assert(a1.b !== a2.b);
+});
+
+test('singleton', async t => {
+	const container = new Container();
+	class A {
+		@inject(BLike)
+		public b!: BLike;
+	}
+	class B implements BLike { }
+
+	const uninjectedB = new B();
+	container.register(BLike, () => uninjectedB);
+	const a1 = container.inject(new A());
+	const a2 = container.inject(new A());
+
+	assert(a1.b);
+	assert(a2.b);
+	assert(a1.b === a2.b);
 });
 
 
@@ -44,12 +64,13 @@ test('circular', async t => {
 		public a!: ALike;
 	}
 
-	const sickA = new A();
-	const sickB = new B();
-	container.register(ALike, () => sickA);
-	container.register(BLike, () => sickB);
+	const uninjectedA = new A();
+	const uninjectedB = new B();
+	container.register(ALike, () => uninjectedA);
+	container.register(BLike, () => uninjectedB);
 	const a = container.initiate<ALike>(ALike);
-	const b = container.inject<BLike>(sickB);
+	const b = container.inject<BLike>(uninjectedB);
+
 	assert(a.b);
 	assert(b.a);
 	assert(a.b === b);
@@ -68,12 +89,12 @@ test('lazy circular', async t => {
 		public a!: ALike;
 	}
 
-	const sickA = new A();
-	const sickB = new B();
-	container.register(ALike, () => sickA);
-	container.register(BLike, () => sickB);
+	const uninjectedA = new A();
+	const uninjectedB = new B();
+	container.register(ALike, () => uninjectedA);
+	container.register(BLike, () => uninjectedB);
 	const a = container.initiate<ALike>(ALike);
-	const b = container.inject<BLike>(sickB);
+	const b = container.inject<BLike>(uninjectedB);
 	assert(a.b);
 	assert(b.a);
 	assert(a.b === b);

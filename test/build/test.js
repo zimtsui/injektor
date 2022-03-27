@@ -20,10 +20,29 @@ const BLike = {};
     ], A.prototype, "b", void 0);
     class B {
     }
-    container.register(ALike, () => new A());
     container.register(BLike, () => new B());
-    const a = container.initiate(ALike);
-    assert(a.b);
+    const a1 = container.inject(new A());
+    const a2 = container.inject(new A());
+    assert(a1.b);
+    assert(a2.b);
+    assert(a1.b !== a2.b);
+});
+(0, ava_1.default)('singleton', async (t) => {
+    const container = new __1.Container();
+    class A {
+    }
+    __decorate([
+        (0, __1.inject)(BLike)
+    ], A.prototype, "b", void 0);
+    class B {
+    }
+    const uninjectedB = new B();
+    container.register(BLike, () => uninjectedB);
+    const a1 = container.inject(new A());
+    const a2 = container.inject(new A());
+    assert(a1.b);
+    assert(a2.b);
+    assert(a1.b === a2.b);
 });
 (0, ava_1.default)('circular', async (t) => {
     const container = new __1.Container();
@@ -37,12 +56,12 @@ const BLike = {};
     __decorate([
         (0, __1.inject)(ALike)
     ], B.prototype, "a", void 0);
-    const sickA = new A();
-    const sickB = new B();
-    container.register(ALike, () => sickA);
-    container.register(BLike, () => sickB);
+    const uninjectedA = new A();
+    const uninjectedB = new B();
+    container.register(ALike, () => uninjectedA);
+    container.register(BLike, () => uninjectedB);
     const a = container.initiate(ALike);
-    const b = container.inject(sickB);
+    const b = container.inject(uninjectedB);
     assert(a.b);
     assert(b.a);
     assert(a.b === b);
@@ -60,12 +79,12 @@ const BLike = {};
     __decorate([
         (0, __1.lazyInject)(ALike)
     ], B.prototype, "a", void 0);
-    const sickA = new A();
-    const sickB = new B();
-    container.register(ALike, () => sickA);
-    container.register(BLike, () => sickB);
+    const uninjectedA = new A();
+    const uninjectedB = new B();
+    container.register(ALike, () => uninjectedA);
+    container.register(BLike, () => uninjectedB);
     const a = container.initiate(ALike);
-    const b = container.inject(sickB);
+    const b = container.inject(uninjectedB);
     assert(a.b);
     assert(b.a);
     assert(a.b === b);
