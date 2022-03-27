@@ -8,4 +8,4 @@ const inject = (id) => (proto, name) => {
     dep_lists_1.depLists.set(proto, list);
 };
 exports.inject = inject;
-//# sourceMappingURL=inject.js.map
+//# sourceMappingURL=instant-inject.js.map
