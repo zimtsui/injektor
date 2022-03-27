@@ -1,6 +1,6 @@
 # Injektor
 
-Injektor is a non-intrusive IoC container and dependency injection framework.
+Injektor is a non-intrusive IoC container and dependency SETTER injection framework.
 
 - No implicit globals.
 - No proxies, getters, setters, or any other hacking modifications being applied to your instance or the prototype chain.
