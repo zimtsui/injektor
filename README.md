@@ -5,7 +5,7 @@ Injektor is a non-intrusive IoC container and dependency injection framework.
 - No implicit globals.
 - No proxies, getters, setters, or any other hacking modifications being applied to your instance or the prototype chain.
 - Instant injection with circular dependency.
-- Not dependent on experimental features, such as metadata reflection.
+- Not dependent on experimental metadata reflection.
 
 # Comparison
 
