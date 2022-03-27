@@ -7,15 +7,17 @@ const injected_1 = require("./injected");
 exports.initiators = new WeakMap();
 class Container {
     constructor() {
-        this.impls = new Map();
+        this.factories = new Map();
+    }
+    isObject(x) {
+        return typeof x === 'object' &&
+            x !== null;
     }
     initiate(id) {
-        const factory = this.impls.get(id);
+        const factory = this.factories.get(id);
         assert(typeof factory !== 'undefined');
         const dep = factory();
-        if (typeof dep === 'object' &&
-            dep !== null &&
-            !injected_1.injected.has(dep))
+        if (this.isObject(dep) && !injected_1.injected.has(dep))
             this.inject(dep);
         return dep;
     }
@@ -40,7 +42,7 @@ class Container {
             }
     }
     register(id, factory) {
-        this.impls.set(id, factory);
+        this.factories.set(id, factory);
     }
 }
 exports.Container = Container;

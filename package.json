@@ -3,14 +3,17 @@
   "version": "0.0.1",
   "description": "",
   "main": "./build/index.js",
-  "types": "./build.index.d.ts",
+  "types": "./build/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc -b ./test/src/tsconfig.json && ava",
     "build": "tsc -b ./src/tsconfig.json"
   },
   "author": "Zim",
   "dependencies": {
     "@types/assert": "^1.5.6",
     "assert": "^2.0.0"
+  },
+  "devDependencies": {
+    "ava": "^4.1.0"
   }
 }

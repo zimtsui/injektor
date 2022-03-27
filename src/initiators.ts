@@ -14,17 +14,19 @@ import {
 export const initiators = new WeakMap<Host, Container>();
 
 export class Container {
-	private impls = new Map<Id, Factory<Dependency>>();
+	private factories = new Map<Id, Factory<Dependency>>();
 
-	public initiate(id: Id): Dependency {
-		const factory = this.impls.get(id);
+	private isObject(x: unknown): x is object {
+		return typeof x === 'object' &&
+			x !== null;
+	}
+
+	public initiate<T extends Dependency>(id: Id): T {
+		const factory = <(() => T) | undefined>
+			this.factories.get(id);
 		assert(typeof factory !== 'undefined');
-		const dep: Dependency = factory();
-		if (
-			typeof dep === 'object' &&
-			dep !== null &&
-			!injected.has(dep)
-		)
+		const dep: T = factory();
+		if (this.isObject(dep) && !injected.has(dep))
 			this.inject(dep);
 		return dep;
 	}
@@ -67,6 +69,6 @@ export class Container {
 		id: Id,
 		factory: Factory<T>,
 	): void {
-		this.impls.set(id, factory);
+		this.factories.set(id, factory);
 	}
 }
