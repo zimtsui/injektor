@@ -24,7 +24,10 @@ export class Container {
 	public initiate<T extends Dependency>(id: Id): T {
 		const factory = <(() => T) | undefined>
 			this.factories.get(id);
-		assert(typeof factory !== 'undefined');
+		assert(
+			typeof factory !== 'undefined',
+			new Unregistered(),
+		);
 		const dep: T = factory();
 		if (this.isObject(dep) && !injected.has(dep))
 			this.inject(dep);
@@ -70,5 +73,11 @@ export class Container {
 		factory: Factory<T>,
 	): void {
 		this.factories.set(id, factory);
+	}
+}
+
+export class Unregistered extends Error {
+	public constructor() {
+		super('Interface identifier is not registered.');
 	}
 }

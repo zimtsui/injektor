@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Container = exports.initiators = void 0;
+exports.Unregistered = exports.Container = exports.initiators = void 0;
 const assert = require("assert");
 const dep_lists_1 = require("./dep-lists");
 const injected_1 = require("./injected");
@@ -15,7 +15,7 @@ class Container {
     }
     initiate(id) {
         const factory = this.factories.get(id);
-        assert(typeof factory !== 'undefined');
+        assert(typeof factory !== 'undefined', new Unregistered());
         const dep = factory();
         if (this.isObject(dep) && !injected_1.injected.has(dep))
             this.inject(dep);
@@ -46,4 +46,10 @@ class Container {
     }
 }
 exports.Container = Container;
+class Unregistered extends Error {
+    constructor() {
+        super('Interface identifier is not registered.');
+    }
+}
+exports.Unregistered = Unregistered;
 //# sourceMappingURL=initiators.js.map

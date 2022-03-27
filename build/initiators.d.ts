@@ -9,3 +9,6 @@ export declare class Container {
     private injectInstantDeps;
     register<T extends Dependency>(id: Id, factory: Factory<T>): void;
 }
+export declare class Unregistered extends Error {
+    constructor();
+}
