@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyInject = void 0;
 const initiators_1 = require("./initiators");
-const assert = require("assert");
 const lazyInject = (id) => (proto, name) => {
     Reflect.defineProperty(proto, name, {
         enumerable: false,
         get() {
             const container = initiators_1.initiators.get(this);
-            assert(typeof container !== 'undefined');
+            if (typeof container === 'undefined')
+                return undefined;
             const value = container.initiate(id);
             Reflect.defineProperty(this, name, { value });
             return value;

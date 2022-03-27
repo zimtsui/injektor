@@ -1,5 +1,4 @@
 import { initiators } from './initiators';
-import assert = require('assert');
 import {
 	PropName,
 	Proto,
@@ -14,9 +13,10 @@ export const lazyInject = (id: Id) => (
 ) => {
 	Reflect.defineProperty(proto, name, {
 		enumerable: false,
-		get(): Dependency {
+		get(): Dependency | undefined {
 			const container = initiators.get(this);
-			assert(typeof container !== 'undefined');
+			if (typeof container === 'undefined')
+				return undefined;
 			const value = container.initiate(id);
 			Reflect.defineProperty(
 				this,
