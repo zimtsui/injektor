@@ -12,7 +12,6 @@ export const lazyInject = (id: Id) => (
 	name: PropName,
 ) => {
 	Reflect.defineProperty(proto, name, {
-		enumerable: false,
 		get(): Dependency | undefined {
 			const container = initiators.get(this);
 			if (typeof container === 'undefined')
@@ -21,7 +20,12 @@ export const lazyInject = (id: Id) => (
 			Reflect.defineProperty(
 				this,
 				name,
-				{ value },
+				{
+					value,
+					enumerable: true,
+					configurable: true,
+					writable: true,
+				},
 			);
 			return value;
 		},
@@ -29,7 +33,12 @@ export const lazyInject = (id: Id) => (
 			Reflect.defineProperty(
 				this,
 				name,
-				{ value },
+				{
+					value,
+					enumerable: true,
+					configurable: true,
+					writable: true,
+				},
 			);
 		},
 	});

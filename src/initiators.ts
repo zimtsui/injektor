@@ -9,16 +9,10 @@ import {
 } from './interfaces';
 
 
-
 export const initiators = new WeakMap<Host, Container>();
 
 export class Container {
 	private factories = new Map<Id, Factory<Dependency>>();
-
-	private isObject(x: unknown): x is object {
-		return typeof x === 'object' &&
-			x !== null;
-	}
 
 	public initiate<T extends Dependency>(id: Id): T {
 		const factory = <(() => T) | undefined>
@@ -55,10 +49,10 @@ export class Container {
 		if (typeof list !== 'undefined')
 			for (const [name, id] of list) {
 				const value = this.initiate(id);
-				Reflect.defineProperty(
+				Reflect.set(
 					host,
 					name,
-					{ value },
+					value,
 				);
 			}
 	}

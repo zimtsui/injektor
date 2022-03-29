@@ -8,10 +8,6 @@ class Container {
     constructor() {
         this.factories = new Map();
     }
-    isObject(x) {
-        return typeof x === 'object' &&
-            x !== null;
-    }
     initiate(id) {
         const factory = this.factories.get(id);
         assert(typeof factory !== 'undefined', new Unregistered());
@@ -33,7 +29,7 @@ class Container {
         if (typeof list !== 'undefined')
             for (const [name, id] of list) {
                 const value = this.initiate(id);
-                Reflect.defineProperty(host, name, { value });
+                Reflect.set(host, name, value);
             }
     }
     register(id, factory) {
