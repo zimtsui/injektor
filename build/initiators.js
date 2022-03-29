@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Unregistered = exports.Container = exports.initiators = void 0;
 const assert = require("assert");
 const dep_lists_1 = require("./dep-lists");
-const injected_1 = require("./injected");
 exports.initiators = new WeakMap();
 class Container {
     constructor() {
@@ -16,13 +15,9 @@ class Container {
     initiate(id) {
         const factory = this.factories.get(id);
         assert(typeof factory !== 'undefined', new Unregistered());
-        const dep = factory();
-        if (this.isObject(dep) && !injected_1.injected.has(dep))
-            this.inject(dep);
-        return dep;
+        return factory();
     }
     inject(host) {
-        injected_1.injected.add(host);
         this.injectInstantDeps(host);
         this.injectLazyDeps(host);
         return host;

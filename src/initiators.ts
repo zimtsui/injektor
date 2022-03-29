@@ -1,6 +1,5 @@
 import assert = require('assert');
 import { depLists } from './dep-lists';
-import { injected } from './injected';
 import {
 	Id,
 	Host,
@@ -28,14 +27,10 @@ export class Container {
 			typeof factory !== 'undefined',
 			new Unregistered(),
 		);
-		const dep: T = factory();
-		if (this.isObject(dep) && !injected.has(dep))
-			this.inject(dep);
-		return dep;
+		return factory();
 	}
 
 	public inject<T extends Host>(host: T): T {
-		injected.add(host);
 		this.injectInstantDeps(host);
 		this.injectLazyDeps(host);
 		return host;

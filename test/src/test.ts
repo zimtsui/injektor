@@ -42,8 +42,8 @@ test('singleton', async t => {
 	}
 	class B implements BLike { }
 
-	const uninjectedB = new B();
-	container.register(BLike, () => uninjectedB);
+	const b = new B();
+	container.register(BLike, () => b);
 	const a1 = container.inject(new A());
 	const a2 = container.inject(new A());
 
@@ -64,12 +64,12 @@ test('circular', async t => {
 		public a!: ALike;
 	}
 
-	const uninjectedA = new A();
-	const uninjectedB = new B();
-	container.register(ALike, () => uninjectedA);
-	container.register(BLike, () => uninjectedB);
-	const a = container.initiate<ALike>(ALike);
-	const b = container.inject<BLike>(uninjectedB);
+	const a = new A();
+	const b = new B();
+	container.register(ALike, () => a);
+	container.register(BLike, () => b);
+	container.inject<ALike>(a);
+	container.inject<BLike>(b);
 
 	assert(a.b);
 	assert(b.a);
@@ -89,12 +89,12 @@ test('lazy circular', async t => {
 		public a!: ALike;
 	}
 
-	const uninjectedA = new A();
-	const uninjectedB = new B();
-	container.register(ALike, () => uninjectedA);
-	container.register(BLike, () => uninjectedB);
-	const a = container.initiate<ALike>(ALike);
-	const b = container.inject<BLike>(uninjectedB);
+	const a = new A();
+	const b = new B();
+	container.register(ALike, () => a);
+	container.register(BLike, () => b);
+	container.inject<ALike>(a);
+	container.inject<BLike>(b);
 	assert(a.b);
 	assert(b.a);
 	assert(a.b === b);

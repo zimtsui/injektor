@@ -36,8 +36,8 @@ const BLike = {};
     ], A.prototype, "b", void 0);
     class B {
     }
-    const uninjectedB = new B();
-    container.register(BLike, () => uninjectedB);
+    const b = new B();
+    container.register(BLike, () => b);
     const a1 = container.inject(new A());
     const a2 = container.inject(new A());
     assert(a1.b);
@@ -56,12 +56,12 @@ const BLike = {};
     __decorate([
         (0, __1.inject)(ALike)
     ], B.prototype, "a", void 0);
-    const uninjectedA = new A();
-    const uninjectedB = new B();
-    container.register(ALike, () => uninjectedA);
-    container.register(BLike, () => uninjectedB);
-    const a = container.initiate(ALike);
-    const b = container.inject(uninjectedB);
+    const a = new A();
+    const b = new B();
+    container.register(ALike, () => a);
+    container.register(BLike, () => b);
+    container.inject(a);
+    container.inject(b);
     assert(a.b);
     assert(b.a);
     assert(a.b === b);
@@ -79,12 +79,12 @@ const BLike = {};
     __decorate([
         (0, __1.lazyInject)(ALike)
     ], B.prototype, "a", void 0);
-    const uninjectedA = new A();
-    const uninjectedB = new B();
-    container.register(ALike, () => uninjectedA);
-    container.register(BLike, () => uninjectedB);
-    const a = container.initiate(ALike);
-    const b = container.inject(uninjectedB);
+    const a = new A();
+    const b = new B();
+    container.register(ALike, () => a);
+    container.register(BLike, () => b);
+    container.inject(a);
+    container.inject(b);
     assert(a.b);
     assert(b.a);
     assert(a.b === b);

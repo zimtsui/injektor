@@ -7,7 +7,7 @@ Injektor is a non-intrusive IoC container and dependency SETTER injection framew
 - Instant injection with circular dependency.
 - Not dependent on experimental metadata reflection.
 
-# Comparison
+## Comparison
 
 - Why not TSyringe
 
@@ -20,9 +20,9 @@ Injektor is a non-intrusive IoC container and dependency SETTER injection framew
 
 	InversifyJS cannot inject circular dependencies instantly, but can only do lazily.
 
-# Basic usage
+## Basic usage
 
-## Simple
+### Simple
 
 ```ts
 import assert = require('assert');
@@ -41,10 +41,7 @@ class A {
 }
 class B implements BLike { }
 
-container.register(BLike, () => {
-	const uninjectedB = new B();
-	return uninjectedB;
-});
+container.register(BLike, () => new B());
 const a1 = container.inject(new A());
 const a2 = container.inject(new A());
 
@@ -53,7 +50,7 @@ assert(a2.b);
 assert(a1.b !== a2.b);
 ```
 
-## Singleton
+### Singleton
 
 ```ts
 import assert = require('assert');
@@ -72,8 +69,8 @@ class A {
 }
 class B implements BLike { }
 
-const uninjectedB = new B();
-container.register(BLike, () => uninjectedB);
+const b = new B();
+container.register(BLike, () => b);
 const a1 = container.inject(new A());
 const a2 = container.inject(new A());
 
@@ -82,7 +79,7 @@ assert(a2.b);
 assert(a1.b === a2.b);
 ```
 
-## Circular Dependency
+### Circular Dependency
 
 ```ts
 import assert = require('assert');
@@ -106,12 +103,12 @@ class B implements BLike {
 	public a!: ALike;
 }
 
-const uninjectedA = new A();
-const uninjectedB = new B();
-container.register(ALike, () => uninjectedA);
-container.register(BLike, () => uninjectedB);
-const a = container.initiate<ALike>(ALike); // or
-const b = container.inject<BLike>(uninjectedB);
+const a = new A();
+const b = new B();
+container.register(ALike, () => a);
+container.register(BLike, () => b);
+const a = container.inject<ALike>(a);
+const b = container.inject<BLike>(b);
 
 assert(a.b);
 assert(b.a);
