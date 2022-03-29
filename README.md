@@ -107,8 +107,8 @@ const a = new A();
 const b = new B();
 container.register(ALike, () => a);
 container.register(BLike, () => b);
-const a = container.inject<ALike>(a);
-const b = container.inject<BLike>(b);
+container.inject<ALike>(a);
+container.inject<BLike>(b);
 
 assert(a.b);
 assert(b.a);
