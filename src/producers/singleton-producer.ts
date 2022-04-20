@@ -14,8 +14,8 @@ export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T
 
 	public getInstance(): T {
 		assert(this.locked);
-
 		this.locked = true;
+
 		if (typeof this.singleton === 'undefined')
 			this.singleton = this.producer.getInstanceWithoutSetterInjection();
 
