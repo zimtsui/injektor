@@ -7,7 +7,7 @@ import { ContainerLike } from '../container/container-like';
 import { MultitionFactoryInsideProducer } from './multition-factory-inside-producer';
 
 
-export class SingletonFactoryInsideProducer<T extends Dep> extends SingletonProducer<T> {
+export class FactoryInsideSingletonProducer<T extends Dep> extends SingletonProducer<T> {
 	public constructor(
 		factory: Factory<T>,
 		container: ContainerLike,

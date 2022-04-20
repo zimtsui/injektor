@@ -5,8 +5,8 @@ const assert = require("assert");
 const container_like_1 = require("./container-like");
 const multition_factory_inside_producer_1 = require("../producers/multition-factory-inside-producer");
 const multition_constructor_inside_producer_1 = require("../producers/multition-constructor-inside-producer");
-const singleton_factory_inside_producer_1 = require("../producers/singleton-factory-inside-producer");
-const singleton_constructor_inside_producer_1 = require("../producers/singleton-constructor-inside-producer");
+const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
+const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
 class Container {
     constructor() {
         this.registry = new Map();
@@ -20,13 +20,13 @@ class Container {
         this.registry.set(id, new multition_constructor_inside_producer_1.MultitionConstructorInsideProducer(ctor, this));
     }
     registerConstructorSingleton(id, ctor) {
-        this.registry.set(id, new singleton_constructor_inside_producer_1.SingletonConstructorInsideProducer(ctor, this));
+        this.registry.set(id, new constructor_inside_singleton_producer_1.ConstructorInsideSingletonProducer(ctor, this));
     }
     registerFactory(id, factory) {
         this.registry.set(id, new multition_factory_inside_producer_1.MultitionFactoryInsideProducer(factory, this));
     }
     registerFactorySingleton(id, factory) {
-        this.registry.set(id, new singleton_factory_inside_producer_1.SingletonFactoryInsideProducer(factory, this));
+        this.registry.set(id, new factory_inside_singleton_producer_1.FactoryInsideSingletonProducer(factory, this));
     }
 }
 exports.Container = Container;
