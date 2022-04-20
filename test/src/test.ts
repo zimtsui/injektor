@@ -1,9 +1,10 @@
 import test from 'ava';
 import assert = require('assert');
 import {
-	inject,
-	lazyInject,
+	setterInjectLazy,
 	Container,
+	setterInject,
+	ctorInject,
 } from '../..';
 
 interface ALike {
@@ -17,59 +18,78 @@ const BLike = {};
 
 
 
-test('simple', async t => {
+test('setter inj / ctor reg', async t => {
 	const container = new Container();
 	class A {
-		@inject(BLike)
+		@setterInject(BLike)
 		public b!: BLike;
 	}
 	class B implements BLike { }
 
-	container.register(BLike, () => new B());
-	const a1 = container.inject(new A());
-	const a2 = container.inject(new A());
+	container.registerConstructor(BLike, B);
+	const a1 = container.setterInject(new A());
+	const a2 = container.setterInject(new A());
 
 	assert(a1.b);
 	assert(a2.b);
 	assert(a1.b !== a2.b);
 });
 
-test('singleton', async t => {
+test('setter inj / ctor singleton reg', async t => {
 	const container = new Container();
 	class A {
-		@inject(BLike)
+		@setterInject(BLike)
 		public b!: BLike;
 	}
 	class B implements BLike { }
 
-	const b = new B();
-	container.register(BLike, () => b);
-	const a1 = container.inject(new A());
-	const a2 = container.inject(new A());
+	container.registerConstructorSingleton(BLike, B);
+	const a1 = container.setterInject(new A());
+	const a2 = container.setterInject(new A());
 
 	assert(a1.b);
 	assert(a2.b);
 	assert(a1.b === a2.b);
 });
 
+test('ctor inj', async t => {
+	const container = new Container();
+	class A implements ALike {
+		public constructor(
+			@ctorInject(BLike)
+			public b: BLike,
+		) { }
+	}
+	class B implements BLike { }
+
+	container.registerConstructorSingleton(BLike, B);
+	container.registerConstructor(ALike, A);
+	const a1 = container.initiate<ALike>(ALike);
+	const a2 = container.initiate<ALike>(ALike);
+
+	assert(a1 !== a2)
+	assert(a1.b);
+	assert(a2.b);
+	assert(a1.b === a2.b);
+});
 
 test('circular', async t => {
 	const container = new Container();
 	class A implements ALike {
-		@inject(BLike)
+		@setterInject(BLike)
 		public b!: BLike;
 	}
 	class B implements BLike {
-		@inject(ALike)
+		@setterInject(ALike)
 		public a!: ALike;
 	}
 
 	const a = new A();
 	const b = new B();
-	container.register(ALike, () => a);
-	container.register(BLike, () => b);
-	container.inject<ALike>(a);
-	container.inject<BLike>(b);
+	container.registerFactory(ALike, () => a);
+	container.registerFactory(BLike, () => b);
+	container.setterInject<ALike>(a);
+	container.setterInject<BLike>(b);
 
 	assert(a.b);
 	assert(b.a);
@@ -81,20 +101,20 @@ test('circular', async t => {
 test('lazy circular', async t => {
 	const container = new Container();
 	class A implements ALike {
-		@lazyInject(BLike)
+		@setterInjectLazy(BLike)
 		public b!: BLike;
 	}
 	class B implements BLike {
-		@lazyInject(ALike)
+		@setterInjectLazy(ALike)
 		public a!: ALike;
 	}
 
 	const a = new A();
 	const b = new B();
-	container.register(ALike, () => a);
-	container.register(BLike, () => b);
-	container.inject<ALike>(a);
-	container.inject<BLike>(b);
+	container.registerFactory(ALike, () => a);
+	container.registerFactory(BLike, () => b);
+	container.setterInject<ALike>(a);
+	container.setterInject<BLike>(b);
 	assert(a.b);
 	assert(b.a);
 	assert(a.b === b);

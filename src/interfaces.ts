@@ -1,21 +1,8 @@
-export type Id = unknown;
-export type Dependency = unknown;
-export type Factory<T extends Dependency> = () => T;
+type Defined = number | string | symbol | object | null | bigint;
+export type Id = Defined;
+export type Dep = number | string | symbol | object | null | bigint;
+export type Factory<T extends Dep> = () => T;
+export type Ctor<T extends Dep> = new (...params: any[]) => T;
 export type Host = object;
 export type Proto = object;
-export type PropName = string | symbol;
-
-export class NotInjected extends Error {
-	public constructor(name: PropName) {
-		if (typeof name === 'symbol')
-			super(`Symbol property ${name.description} hasn't been injected.`);
-		else
-			super(`Property ${name} hasn't been injected.`);
-	}
-}
-
-export class InjectionConflict extends Error {
-	public constructor() {
-		super('Injection may conflict with other injection.');
-	}
-}
+export type PropName = number | string | symbol;

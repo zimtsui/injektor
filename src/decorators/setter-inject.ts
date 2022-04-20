@@ -1,27 +1,21 @@
-import { depLists } from './dep-lists';
+import { setterInjTab } from '../globals/setter-inj-tab';
 import assert = require('assert');
 import {
 	Id,
 	Proto,
 	PropName,
-	Dependency,
-	NotInjected,
-	InjectionConflict,
-} from './interfaces';
+	Dep,
+} from '../interfaces';
+import { NotInjected } from './exceptions';
 
-export const inject = (id: Id) => (
+
+export const setterInject = (id: Id) => (
 	proto: Proto,
 	name: PropName,
 ) => {
-	const oldDescriptor = Reflect.getOwnPropertyDescriptor(proto, name);
-	assert(
-		typeof oldDescriptor === 'undefined',
-		new InjectionConflict(),
-	);
-
-	const list = depLists.get(proto) || [];
+	const list = setterInjTab.get(proto) || [];
 	list.push([name, id]);
-	depLists.set(proto, list);
+	setterInjTab.set(proto, list);
 
 	Reflect.defineProperty(
 		proto,
@@ -32,7 +26,7 @@ export const inject = (id: Id) => (
 			get(): never {
 				throw new NotInjected(name);
 			},
-			set(value: Dependency): void {
+			set(value: Dep): void {
 				Reflect.defineProperty(
 					this,
 					name,

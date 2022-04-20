@@ -1,12 +1,9 @@
-export declare type Id = unknown;
-export declare type Dependency = unknown;
-export declare type Factory<T extends Dependency> = () => T;
+declare type Defined = number | string | symbol | object | null | bigint;
+export declare type Id = Defined;
+export declare type Dep = number | string | symbol | object | null | bigint;
+export declare type Factory<T extends Dep> = () => T;
+export declare type Ctor<T extends Dep> = new (...params: any[]) => T;
 export declare type Host = object;
 export declare type Proto = object;
-export declare type PropName = string | symbol;
-export declare class NotInjected extends Error {
-    constructor(name: PropName);
-}
-export declare class InjectionConflict extends Error {
-    constructor();
-}
+export declare type PropName = number | string | symbol;
+export {};

@@ -1,29 +1,25 @@
 import assert = require('assert');
-import { initiators } from './initiators';
+import { initiators } from '../container/container';
 import {
 	PropName,
 	Proto,
 	Id,
-	Dependency,
-	NotInjected,
-	InjectionConflict,
-} from './interfaces';
+	Dep,
+} from '../interfaces';
+import { NotInjected } from './exceptions';
 
 
-export const lazyInject = (id: Id) => (
+export const setterInjectLazy = (id: Id) => (
 	proto: Proto,
 	name: PropName,
 ) => {
-	const oldDescriptor = Reflect.getOwnPropertyDescriptor(proto, name);
-	assert(typeof oldDescriptor === 'undefined', new InjectionConflict());
-
 	Reflect.defineProperty(
 		proto,
 		name,
 		{
 			configurable: true,
 			enumerable: false,
-			get(): Dependency | undefined {
+			get(): Dep | undefined {
 				const container = initiators.get(this);
 				assert(
 					typeof container !== 'undefined',
@@ -42,7 +38,7 @@ export const lazyInject = (id: Id) => (
 				);
 				return value;
 			},
-			set(value: Dependency): void {
+			set(value: Dep): void {
 				Reflect.defineProperty(
 					this,
 					name,

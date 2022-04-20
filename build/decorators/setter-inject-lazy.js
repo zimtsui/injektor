@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lazyInject = void 0;
+exports.setterInjectLazy = void 0;
 const assert = require("assert");
-const initiators_1 = require("./initiators");
-const interfaces_1 = require("./interfaces");
-const lazyInject = (id) => (proto, name) => {
-    const oldDescriptor = Reflect.getOwnPropertyDescriptor(proto, name);
-    assert(typeof oldDescriptor === 'undefined', new interfaces_1.InjectionConflict());
+const container_1 = require("../container/container");
+const exceptions_1 = require("./exceptions");
+const setterInjectLazy = (id) => (proto, name) => {
     Reflect.defineProperty(proto, name, {
         configurable: true,
         enumerable: false,
         get() {
-            const container = initiators_1.initiators.get(this);
-            assert(typeof container !== 'undefined', new interfaces_1.NotInjected(name));
+            const container = container_1.initiators.get(this);
+            assert(typeof container !== 'undefined', new exceptions_1.NotInjected(name));
             const value = container.initiate(id);
             Reflect.defineProperty(this, name, {
                 value,
@@ -32,5 +30,5 @@ const lazyInject = (id) => (proto, name) => {
         },
     });
 };
-exports.lazyInject = lazyInject;
-//# sourceMappingURL=lazy-inject.js.map
+exports.setterInjectLazy = setterInjectLazy;
+//# sourceMappingURL=setter-inject-lazy.js.map
