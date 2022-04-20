@@ -7,7 +7,8 @@ class SingletonProducer {
     }
     getInstance() {
         if (typeof this.singleton === 'undefined')
-            this.singleton = this.producer.getInstance();
+            this.singleton = this.producer.getInstanceWithoutSetterInjection();
+        this.producer.setterInject(this.singleton);
         return this.singleton;
     }
 }

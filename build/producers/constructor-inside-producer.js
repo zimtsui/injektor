@@ -10,6 +10,12 @@ class ConstructorInsideProducer {
     getInstance() {
         return this.factoryProducer.getInstance();
     }
+    getInstanceWithoutSetterInjection() {
+        return this.factoryProducer.getInstanceWithoutSetterInjection();
+    }
+    setterInject(instance) {
+        return this.factoryProducer.setterInject(instance);
+    }
 }
 exports.ConstructorInsideProducer = ConstructorInsideProducer;
 //# sourceMappingURL=constructor-inside-producer.js.map

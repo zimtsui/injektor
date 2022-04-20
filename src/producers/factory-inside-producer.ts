@@ -1,4 +1,4 @@
-import { ProducerLike } from './producer-like';
+import { MultitionProducerLike } from './multition-producer-like';
 import {
 	Dep,
 	Host,
@@ -6,19 +6,29 @@ import {
 } from '../interfaces';
 import { ContainerLike } from '../container/container-like';
 import { instantSetterInjector } from '../injectors/instant-setter-injector';
+import { lazySetterInjector } from '../injectors/lazy-setter-injection';
 
 
-export class FactoryInsideProducer<T extends Dep> implements ProducerLike<T> {
+export class FactoryInsideProducer<T extends Dep> implements MultitionProducerLike<T> {
 	public constructor(
 		private factory: Factory<T>,
 		private container: ContainerLike,
 	) { }
 
 	public getInstance(): T {
-		const host = this.factory();
-		if (!isHost(host)) return host;
-		instantSetterInjector.inject(host, this.container);
-		return host;
+		const instance = this.getInstanceWithoutSetterInjection();
+		return this.setterInject(instance);
+	}
+
+	public getInstanceWithoutSetterInjection(): T {
+		return this.factory();
+	}
+
+	public setterInject(instance: T): T {
+		if (!isHost(instance)) return instance;
+		instantSetterInjector.inject(instance, this.container);
+		lazySetterInjector.inject(instance, this.container);
+		return instance;
 	}
 }
 

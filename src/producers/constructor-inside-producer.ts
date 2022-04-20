@@ -1,4 +1,4 @@
-import { ProducerLike } from './producer-like';
+import { MultitionProducerLike } from './multition-producer-like';
 import {
 	Host,
 	Ctor,
@@ -8,7 +8,7 @@ import { FactoryInsideProducer } from './factory-inside-producer';
 import { constructorInjector } from '../injectors/constructor-injector';
 
 
-export class ConstructorInsideProducer<T extends Host> implements ProducerLike<T> {
+export class ConstructorInsideProducer<T extends Host> implements MultitionProducerLike<T> {
 	private factoryProducer: FactoryInsideProducer<T>;
 
 	public constructor(
@@ -23,5 +23,13 @@ export class ConstructorInsideProducer<T extends Host> implements ProducerLike<T
 
 	public getInstance(): T {
 		return this.factoryProducer.getInstance();
+	}
+
+	public getInstanceWithoutSetterInjection(): T {
+		return this.factoryProducer.getInstanceWithoutSetterInjection();
+	}
+
+	public setterInject(instance: T): T {
+		return this.factoryProducer.setterInject(instance);
 	}
 }
