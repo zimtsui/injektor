@@ -1,0 +1,1 @@
+{"version":3,"file":"setter-injection-like.js","sourceRoot":"","sources":["../../src/injectors/setter-injection-like.ts"],"names":[],"mappings":";;;AAsBA,MAAa,WAAY,SAAQ,KAAK;IACrC,YAAmB,IAAc;QAChC,IAAI,OAAO,IAAI,KAAK,QAAQ;YAC3B,KAAK,CAAC,mBAAmB,IAAI,CAAC,WAAW,wBAAwB,CAAC,CAAC;;YAEnE,KAAK,CAAC,YAAY,IAAI,wBAAwB,CAAC,CAAC;IAClD,CAAC;CACD;AAPD,kCAOC"}

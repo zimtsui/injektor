@@ -1,7 +1,7 @@
 export { Host, Dep, Ctor, Id, Factory, } from './interfaces';
 export { Container } from './container/container';
 export { Unregistered } from './container/container-like';
-export { setterInject } from './decorators/setter-inject';
-export { setterInjectLazy } from './decorators/setter-inject-lazy';
-export { ctorInject } from './decorators/ctor-inject';
-export { NotInjected } from './decorators/exceptions';
+export { NotInjected } from './injectors/setter-injection-like';
+export declare const instantInject: (id: string | number | bigint | symbol | object | null) => (proto: object, name: import("./interfaces").PropName) => void;
+export declare const lazyInject: (id: string | number | bigint | symbol | object | null) => (proto: object, name: import("./interfaces").PropName) => void;
+export declare const inject: (id: string | number | bigint | symbol | object | null) => (ctor: import("./interfaces").Ctor<import("./interfaces").Dep>, name: unknown, index: number) => void;

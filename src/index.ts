@@ -7,7 +7,13 @@ export {
 } from './interfaces';
 export { Container } from './container/container';
 export { Unregistered } from './container/container-like';
-export { setterInject } from './decorators/setter-inject';
-export { setterInjectLazy } from './decorators/setter-inject-lazy';
-export { ctorInject } from './decorators/ctor-inject';
-export { NotInjected } from './decorators/exceptions';
+export { NotInjected } from './injectors/setter-injection-like';
+
+import { instantSetterInjector } from './injectors/instant-setter-injector';
+export const instantInject = instantSetterInjector.decorator;
+
+import { lazySetterInjector } from './injectors/lazy-setter-injection';
+export const lazyInject = lazySetterInjector.decorator;
+
+import { constructorInjector } from './injectors/constructor-injector';
+export const inject = constructorInjector.decorator;

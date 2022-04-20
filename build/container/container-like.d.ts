@@ -1,7 +1,6 @@
-import { Id, Host, Dep, Factory, Ctor } from '../interfaces';
+import { Id, Dep, Factory, Ctor } from '../interfaces';
 export interface ContainerLike {
     initiate<T extends Dep>(id: Id): T;
-    setterInject<T extends Host>(host: T): T;
     registerConstructor<T extends Dep>(id: Id, constructor: Ctor<T>): void;
     registerConstructorSingleton<T extends Dep>(id: Id, constructor: Ctor<T>): void;
     registerFactory<T extends Dep>(id: Id, factory: Factory<T>): void;

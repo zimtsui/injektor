@@ -1,0 +1,1 @@
+{"version":3,"file":"singleton-factory-inside-producer.js","sourceRoot":"","sources":["../../src/producers/singleton-factory-inside-producer.ts"],"names":[],"mappings":";;;AAAA,6DAAyD;AAMzD,uEAAkE;AAGlE,MAAa,8BAA8C,SAAQ,sCAAoB;IACtF,YACC,OAAmB,EACnB,SAAwB;QAExB,MAAM,QAAQ,GAAG,IAAI,+CAAqB,CACzC,OAAO,EACP,SAAS,CACT,CAAC;QACF,KAAK,CAAC,QAAQ,CAAC,CAAC;IACjB,CAAC;CACD;AAXD,wEAWC"}

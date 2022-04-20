@@ -1,54 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Container = exports.initiators = void 0;
+exports.Container = void 0;
 const assert = require("assert");
-const setter_inj_tab_1 = require("../globals/setter-inj-tab");
-const injected_set_1 = require("../globals/injected-set");
 const container_like_1 = require("./container-like");
-const registration_1 = require("../registration");
-exports.initiators = new WeakMap();
+const factory_inside_producer_1 = require("../producers/factory-inside-producer");
+const constructor_inside_producer_1 = require("../producers/constructor-inside-producer");
+const singleton_factory_inside_producer_1 = require("../producers/singleton-factory-inside-producer");
+const singleton_constructor_inside_producer_1 = require("../producers/singleton-constructor-inside-producer");
 class Container {
     constructor() {
         this.registry = new Map();
     }
     initiate(id) {
-        const reg = this.registry.get(id);
-        assert(typeof reg !== 'undefined', new container_like_1.Unregistered());
-        return reg.getInstance();
-    }
-    setterInject(host) {
-        if (injected_set_1.injected.has(host))
-            return host;
-        injected_set_1.injected.add(host);
-        this.injectInstantDeps(host);
-        this.injectLazyDeps(host);
-        return host;
-    }
-    injectLazyDeps(host) {
-        exports.initiators.set(host, this);
-    }
-    injectInstantDeps(host, proto = host.constructor.prototype) {
-        if (proto === null)
-            return;
-        this.injectInstantDeps(host, Reflect.getPrototypeOf(proto));
-        const list = setter_inj_tab_1.setterInjTab.get(proto);
-        if (typeof list !== 'undefined')
-            for (const [name, id] of list) {
-                const value = this.initiate(id);
-                Reflect.set(host, name, value);
-            }
+        const producer = this.registry.get(id);
+        assert(typeof producer !== 'undefined', new container_like_1.Unregistered());
+        return producer.getInstance();
     }
     registerConstructor(id, ctor) {
-        this.registry.set(id, new registration_1.CtorReg(ctor, this));
+        this.registry.set(id, new constructor_inside_producer_1.ConstructorInsideProducer(ctor, this));
     }
     registerConstructorSingleton(id, ctor) {
-        this.registry.set(id, new registration_1.CtorSingletonReg(ctor, this));
+        this.registry.set(id, new singleton_constructor_inside_producer_1.SingletonConstructorInsideProducer(ctor, this));
     }
     registerFactory(id, factory) {
-        this.registry.set(id, new registration_1.FactoryReg(factory, this));
+        this.registry.set(id, new factory_inside_producer_1.FactoryInsideProducer(factory, this));
     }
     registerFactorySingleton(id, factory) {
-        this.registry.set(id, new registration_1.FactorySingletonReg(factory, this));
+        this.registry.set(id, new singleton_factory_inside_producer_1.SingletonFactoryInsideProducer(factory, this));
     }
 }
 exports.Container = Container;

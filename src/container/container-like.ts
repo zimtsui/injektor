@@ -1,9 +1,5 @@
-import assert = require('assert');
-import { setterInjTab } from '../globals/setter-inj-tab';
-import { injected } from '../globals/injected-set';
 import {
 	Id,
-	Host,
 	Dep,
 	Factory,
 	Ctor,
@@ -12,8 +8,6 @@ import {
 
 export interface ContainerLike {
 	initiate<T extends Dep>(id: Id): T;
-
-	setterInject<T extends Host>(host: T): T;
 
 	registerConstructor<T extends Dep>(
 		id: Id,
