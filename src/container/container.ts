@@ -7,7 +7,7 @@ import { FactoryInsideProducer } from '../producers/factory-inside-producer';
 import { ConstructorInsideProducer } from '../producers/constructor-inside-producer';
 import { SingletonFactoryInsideProducer } from '../producers/singleton-factory-inside-producer';
 import { SingletonConstructorInsideProducer } from '../producers/singleton-constructor-inside-producer';
-import { Producer } from '../producers/producer-like';
+import { ProducerLike } from '../producers/producer-like';
 import {
 	Id,
 	Dep,
@@ -17,10 +17,10 @@ import {
 
 
 export class Container implements ContainerLike {
-	private registry = new Map<Id, Producer<Dep>>();
+	private registry = new Map<Id, ProducerLike<Dep>>();
 
 	public initiate<T extends Dep>(id: Id): T {
-		const producer = <Producer<T> | undefined>this.registry.get(id);
+		const producer = <ProducerLike<T> | undefined>this.registry.get(id);
 		assert(
 			typeof producer !== 'undefined',
 			new Unregistered(),

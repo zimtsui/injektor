@@ -1,4 +1,4 @@
 import { Dep } from '../interfaces';
-export interface Producer<T extends Dep> {
+export interface ProducerLike<T extends Dep> {
     getInstance(): T;
 }

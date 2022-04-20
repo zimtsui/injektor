@@ -1,4 +1,4 @@
-import { Producer } from './producer-like';
+import { ProducerLike } from './producer-like';
 import {
 	Dep,
 	Host,
@@ -10,7 +10,7 @@ import {
 import { instantSetterInjector } from '../injectors/instant-setter-injector';
 
 
-export class FactoryInsideProducer<T extends Dep> implements Producer<T> {
+export class FactoryInsideProducer<T extends Dep> implements ProducerLike<T> {
 	public constructor(
 		private factory: Factory<T>,
 		private container: ContainerLike,
