@@ -3,8 +3,8 @@ import {
 	ContainerLike,
 	Unregistered,
 } from './container-like';
-import { FactoryInsideProducer } from '../producers/factory-inside-producer';
-import { ConstructorInsideProducer } from '../producers/constructor-inside-producer';
+import { MultitionFactoryInsideProducer } from '../producers/multition-factory-inside-producer';
+import { MultitionConstructorInsideProducer } from '../producers/multition-constructor-inside-producer';
 import { SingletonFactoryInsideProducer } from '../producers/singleton-factory-inside-producer';
 import { SingletonConstructorInsideProducer } from '../producers/singleton-constructor-inside-producer';
 import { ProducerLike } from '../producers/producer-like';
@@ -35,7 +35,7 @@ export class Container implements ContainerLike {
 	): void {
 		this.registry.set(
 			id,
-			new ConstructorInsideProducer(ctor, this),
+			new MultitionConstructorInsideProducer(ctor, this),
 		);
 	}
 
@@ -55,7 +55,7 @@ export class Container implements ContainerLike {
 	): void {
 		this.registry.set(
 			id,
-			new FactoryInsideProducer(factory, this),
+			new MultitionFactoryInsideProducer(factory, this),
 		);
 	}
 

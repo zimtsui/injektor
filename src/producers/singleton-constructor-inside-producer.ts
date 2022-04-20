@@ -4,7 +4,7 @@ import {
 	Ctor,
 } from '../interfaces';
 import { ContainerLike } from '../container/container-like';
-import { ConstructorInsideProducer } from './constructor-inside-producer';
+import { MultitionConstructorInsideProducer } from './multition-constructor-inside-producer';
 
 
 export class SingletonConstructorInsideProducer<T extends Host> extends SingletonProducer<T> {
@@ -12,7 +12,7 @@ export class SingletonConstructorInsideProducer<T extends Host> extends Singleto
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	) {
-		const producer = new ConstructorInsideProducer(
+		const producer = new MultitionConstructorInsideProducer(
 			ctor,
 			container,
 		);

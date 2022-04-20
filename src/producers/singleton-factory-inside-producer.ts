@@ -4,7 +4,7 @@ import {
 	Factory,
 } from '../interfaces';
 import { ContainerLike } from '../container/container-like';
-import { FactoryInsideProducer } from './factory-inside-producer';
+import { MultitionFactoryInsideProducer } from './multition-factory-inside-producer';
 
 
 export class SingletonFactoryInsideProducer<T extends Dep> extends SingletonProducer<T> {
@@ -12,7 +12,7 @@ export class SingletonFactoryInsideProducer<T extends Dep> extends SingletonProd
 		factory: Factory<T>,
 		container: ContainerLike,
 	) {
-		const producer = new FactoryInsideProducer(
+		const producer = new MultitionFactoryInsideProducer(
 			factory,
 			container,
 		);
