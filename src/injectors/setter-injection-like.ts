@@ -5,6 +5,7 @@ import {
 	Host,
 } from '../interfaces'
 import { ContainerLike } from '../container/container-like';
+import { InjectorLike } from './injector-like';
 
 
 export type Decorator = (id: Id) => (
@@ -12,7 +13,7 @@ export type Decorator = (id: Id) => (
 	name: PropName,
 ) => void;
 
-export interface SetterInjectorLike {
+export interface SetterInjectorLike extends InjectorLike {
 	decorator: Decorator;
 	inject<T extends Host>(
 		host: T,

@@ -5,11 +5,12 @@ import {
 } from '../interfaces';
 import { ContainerLike } from '../container/container-like';
 import assert = require('assert');
+import { InjectorLike } from './injector-like';
 
 
 export type Marks = (Id | undefined)[];
 
-export class ConstructorInjector {
+export class ConstructorInjector implements InjectorLike {
 	private table = new WeakMap<Ctor<Dep>, Marks>();
 
 	public decorator = (id: Id) => (
