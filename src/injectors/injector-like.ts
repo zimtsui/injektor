@@ -12,3 +12,6 @@ export interface InjectorLike {
 		container: ContainerLike,
 	): T;
 }
+
+export type Proto = object;
+export type PropName = number | string | symbol;

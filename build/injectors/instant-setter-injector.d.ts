@@ -1,5 +1,6 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { PropName, Id, Proto, Host } from '../interfaces';
+import { Id, Host } from '../interfaces';
+import { PropName, Proto } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 export declare class InstantSetterInjector implements SetterInjectorLike {
     private table;

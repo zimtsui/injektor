@@ -3,12 +3,14 @@ import {
 	NotInjected,
 } from './setter-injection-like';
 import {
-	PropName,
 	Id,
-	Proto,
 	Dep,
 	Host,
 } from '../interfaces';
+import {
+	PropName,
+	Proto,
+} from './injector-like';
 import { ContainerLike } from '../container/container-like';
 
 

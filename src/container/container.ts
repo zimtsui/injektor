@@ -13,6 +13,7 @@ import {
 	Dep,
 	Factory,
 	Ctor,
+	Host,
 } from '../interfaces';
 
 
@@ -28,7 +29,7 @@ export class Container implements ContainerLike {
 		return producer.getInstance();
 	}
 
-	public registerConstructor<T extends Dep>(
+	public registerConstructor<T extends Host>(
 		id: Id,
 		ctor: Ctor<T>,
 	): void {
@@ -38,7 +39,7 @@ export class Container implements ContainerLike {
 		);
 	}
 
-	public registerConstructorSingleton<T extends Dep>(
+	public registerConstructorSingleton<T extends Host>(
 		id: Id,
 		ctor: Ctor<T>,
 	): void {

@@ -1,4 +1,5 @@
-import { Id, Proto, PropName, Host } from '../interfaces';
+import { Id, Host } from '../interfaces';
+import { PropName, Proto } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 import { InjectorLike } from './injector-like';
 export declare type Decorator = (id: Id) => (proto: Proto, name: PropName) => void;

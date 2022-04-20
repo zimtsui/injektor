@@ -1,8 +1,9 @@
 import {
 	Id,
-	Dep,
+	Host,
 	Ctor,
 } from '../interfaces';
+import { PropName } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 import assert = require('assert');
 import { InjectorLike } from './injector-like';
@@ -11,11 +12,11 @@ import { InjectorLike } from './injector-like';
 export type Marks = (Id | undefined)[];
 
 export class ConstructorInjector implements InjectorLike {
-	private table = new WeakMap<Ctor<Dep>, Marks>();
+	private table = new WeakMap<Ctor<Host>, Marks>();
 
 	public decorator = (id: Id) => (
-		ctor: Ctor<Dep>,
-		name: unknown,
+		ctor: Ctor<Host>,
+		name: PropName,
 		index: number,
 	) => {
 		const marks = this.table.get(ctor) || [];
@@ -23,7 +24,7 @@ export class ConstructorInjector implements InjectorLike {
 		this.table.set(ctor, marks);
 	}
 
-	public inject<T extends Dep>(
+	public inject<T extends Host>(
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	): T {
@@ -35,7 +36,7 @@ export class ConstructorInjector implements InjectorLike {
 		return new ctor(...deps);
 	}
 
-	private getMarks(ctor: Ctor<Dep>): Marks {
+	private getMarks(ctor: Ctor<Host>): Marks {
 		return this.table.get(ctor) || [];
 	}
 }

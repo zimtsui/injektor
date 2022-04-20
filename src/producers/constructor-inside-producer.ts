@@ -1,16 +1,14 @@
 import { ProducerLike } from './producer-like';
 import {
-	Dep,
+	Host,
 	Ctor,
 } from '../interfaces';
-import {
-	ContainerLike,
-} from '../container/container-like';
+import { ContainerLike } from '../container/container-like';
 import { FactoryInsideProducer } from './factory-inside-producer';
 import { constructorInjector } from '../injectors/constructor-injector';
 
 
-export class ConstructorInsideProducer<T extends Dep> implements ProducerLike<T> {
+export class ConstructorInsideProducer<T extends Host> implements ProducerLike<T> {
 	private factoryProducer: FactoryInsideProducer<T>;
 
 	public constructor(

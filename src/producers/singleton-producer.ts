@@ -1,7 +1,5 @@
 import { ProducerLike } from './producer-like';
-import {
-	Dep,
-} from '../interfaces';
+import { Dep } from '../interfaces';
 
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{

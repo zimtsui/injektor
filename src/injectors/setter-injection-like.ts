@@ -1,9 +1,11 @@
 import {
 	Id,
-	Proto,
-	PropName,
 	Host,
 } from '../interfaces'
+import {
+	PropName,
+	Proto,
+} from './injector-like';
 import { ContainerLike } from '../container/container-like';
 import { InjectorLike } from './injector-like';
 

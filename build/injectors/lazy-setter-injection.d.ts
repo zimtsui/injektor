@@ -1,5 +1,6 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { PropName, Id, Proto, Host } from '../interfaces';
+import { Id, Host } from '../interfaces';
+import { PropName, Proto } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 export declare class LazySetterInjector implements SetterInjectorLike {
     private initiators;

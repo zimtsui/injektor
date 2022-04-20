@@ -3,18 +3,19 @@ import {
 	Dep,
 	Factory,
 	Ctor,
+	Host,
 } from '../interfaces';
 
 
 export interface ContainerLike {
 	initiate<T extends Dep>(id: Id): T;
 
-	registerConstructor<T extends Dep>(
+	registerConstructor<T extends Host>(
 		id: Id,
 		constructor: Ctor<T>,
 	): void;
 
-	registerConstructorSingleton<T extends Dep>(
+	registerConstructorSingleton<T extends Host>(
 		id: Id,
 		constructor: Ctor<T>,
 	): void;

@@ -4,9 +4,7 @@ import {
 	Host,
 	Factory,
 } from '../interfaces';
-import {
-	ContainerLike,
-} from '../container/container-like';
+import { ContainerLike } from '../container/container-like';
 import { instantSetterInjector } from '../injectors/instant-setter-injector';
 
 
