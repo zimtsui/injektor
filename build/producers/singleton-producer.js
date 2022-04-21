@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SingletonProducer = void 0;
+const exceptions_1 = require("../exceptions");
 const assert = require("assert");
 class SingletonProducer {
     constructor(producer) {
@@ -8,12 +9,13 @@ class SingletonProducer {
         this.locked = false;
     }
     getInstance() {
-        assert(this.locked);
-        this.locked = true;
-        if (typeof this.singleton === 'undefined')
+        if (typeof this.singleton === 'undefined') {
+            assert(!this.locked, new exceptions_1.CircularConstructorInjection());
+            this.locked = true;
             this.singleton = this.producer.getInstanceWithoutSetterInjection();
-        this.locked = false;
-        this.producer.setterInject(this.singleton);
+            this.locked = false;
+            this.producer.setterInject(this.singleton);
+        }
         return this.singleton;
     }
 }

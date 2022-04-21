@@ -1,24 +1,24 @@
 import test from 'ava';
-import assert = require('assert');
 import {
 	Container,
 	inject,
 	lazyInject,
 	instantInject,
+	CircularConstructorInjection,
 } from '../..';
 
 interface ALike {
 	b?: BLike;
 }
-const ALike = {};
+const ALike = 'ALike';
 interface BLike {
 	a?: ALike;
 }
-const BLike = {};
+const BLike = 'BLike';
 
 
 
-test('setter inj / ctor reg', async t => {
+test('setter injection', async t => {
 	const container = new Container();
 	class A {
 		@instantInject(BLike)
@@ -31,12 +31,12 @@ test('setter inj / ctor reg', async t => {
 	const a1 = container.initiate<ALike>(ALike);
 	const a2 = container.initiate<ALike>(ALike);
 
-	assert(a1.b);
-	assert(a2.b);
-	assert(a1.b !== a2.b);
+	t.assert(a1.b);
+	t.assert(a2.b);
+	t.assert(a1.b !== a2.b);
 });
 
-test('setter inj / ctor singleton reg', async t => {
+test('setter injection singleton', async t => {
 	const container = new Container();
 	class A {
 		@instantInject(BLike)
@@ -46,15 +46,36 @@ test('setter inj / ctor singleton reg', async t => {
 
 	container.registerConstructorSingleton(BLike, B);
 	container.registerConstructor(ALike, A);
-	const a1 = container.initiate<ALike>(A);
-	const a2 = container.initiate<ALike>(A);
+	const a1 = container.initiate<ALike>(ALike);
+	const a2 = container.initiate<ALike>(ALike);
 
-	assert(a1.b);
-	assert(a2.b);
-	assert(a1.b === a2.b);
+	t.assert(a1.b);
+	t.assert(a2.b);
+	t.assert(a1.b === a2.b);
 });
 
-test('ctor inj', async t => {
+test('constructor injection', async t => {
+	const container = new Container();
+	class A implements ALike {
+		public constructor(
+			@inject(BLike)
+			public b: BLike,
+		) { }
+	}
+	class B implements BLike { }
+
+	container.registerConstructor(BLike, B);
+	container.registerConstructor(ALike, A);
+	const a1 = container.initiate<ALike>(ALike);
+	const a2 = container.initiate<ALike>(ALike);
+
+	t.assert(a1 !== a2);
+	t.assert(a1.b);
+	t.assert(a2.b);
+	t.assert(a1.b !== a2.b);
+});
+
+test('constructor injection singleton', async t => {
 	const container = new Container();
 	class A implements ALike {
 		public constructor(
@@ -66,16 +87,17 @@ test('ctor inj', async t => {
 
 	container.registerConstructorSingleton(BLike, B);
 	container.registerConstructor(ALike, A);
+	container.initiate<BLike>(BLike);
 	const a1 = container.initiate<ALike>(ALike);
 	const a2 = container.initiate<ALike>(ALike);
 
-	assert(a1 !== a2)
-	assert(a1.b);
-	assert(a2.b);
-	assert(a1.b === a2.b);
+	t.assert(a1 !== a2);
+	t.assert(a1.b);
+	t.assert(a2.b);
+	t.assert(a1.b === a2.b);
 });
 
-test('circular', async t => {
+test('circular setter injection', async t => {
 	const container = new Container();
 	class A implements ALike {
 		@instantInject(BLike)
@@ -86,21 +108,19 @@ test('circular', async t => {
 		public a!: ALike;
 	}
 
-	const a = new A();
-	const b = new B();
-	container.registerFactory(ALike, () => a);
-	container.registerFactory(BLike, () => b);
-	container.initiate<ALike>(a);
-	container.initiate<BLike>(b);
+	container.registerConstructorSingleton(ALike, A);
+	container.registerConstructorSingleton(BLike, B);
+	const a = container.initiate<ALike>(ALike);
+	const b = container.initiate<BLike>(BLike);
 
-	assert(a.b);
-	assert(b.a);
-	assert(a.b === b);
-	assert(b.a === a);
+	t.assert(a.b);
+	t.assert(b.a);
+	t.assert(a.b === b);
+	t.assert(b.a === a);
 });
 
 
-test('lazy circular', async t => {
+test('circular lazy setter injection', async t => {
 	const container = new Container();
 	class A implements ALike {
 		@lazyInject(BLike)
@@ -111,14 +131,38 @@ test('lazy circular', async t => {
 		public a!: ALike;
 	}
 
-	const a = new A();
-	const b = new B();
-	container.registerFactory(ALike, () => a);
-	container.registerFactory(BLike, () => b);
-	container.initiate<ALike>(a);
-	container.initiate<BLike>(b);
-	assert(a.b);
-	assert(b.a);
-	assert(a.b === b);
-	assert(b.a === a);
+	container.registerConstructorSingleton(ALike, A);
+	container.registerConstructorSingleton(BLike, B);
+	const a = container.initiate<ALike>(ALike);
+	const b = container.initiate<BLike>(BLike);
+
+	t.assert(a.b);
+	t.assert(b.a);
+	t.assert(a.b === b);
+	t.assert(b.a === a);
+});
+
+test('circular constructor injection', async t => {
+	const container = new Container();
+	class A implements ALike {
+		public constructor(
+			@inject(BLike)
+			public b: BLike,
+		) { }
+	}
+	class B implements BLike {
+		public constructor(
+			@inject(ALike)
+			public a: ALike,
+		) { }
+	}
+
+	container.registerConstructorSingleton(ALike, A);
+	container.registerConstructorSingleton(BLike, B);
+	try {
+		const a = container.initiate<ALike>(ALike);
+		throw new Error('');
+	} catch (err) {
+		t.assert(err instanceof CircularConstructorInjection);
+	}
 });

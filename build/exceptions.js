@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Unregistered = exports.NotInjected = void 0;
+exports.CircularConstructorInjection = exports.Unregistered = exports.NotInjected = void 0;
 class NotInjected extends Error {
     constructor(name) {
         if (typeof name === 'symbol')
@@ -16,4 +16,10 @@ class Unregistered extends Error {
     }
 }
 exports.Unregistered = Unregistered;
+class CircularConstructorInjection extends Error {
+    constructor() {
+        super('Circular constructor injection.');
+    }
+}
+exports.CircularConstructorInjection = CircularConstructorInjection;
 //# sourceMappingURL=exceptions.js.map

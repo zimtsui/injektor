@@ -5,3 +5,6 @@ export declare class NotInjected extends Error {
 export declare class Unregistered extends Error {
     constructor();
 }
+export declare class CircularConstructorInjection extends Error {
+    constructor();
+}

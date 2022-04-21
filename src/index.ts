@@ -6,10 +6,7 @@ export {
 	Factory,
 } from './interfaces';
 export { Container } from './container/container';
-export {
-	NotInjected,
-	Unregistered,
-} from './exceptions';
+export * from './exceptions';
 
 import { instantSetterInjector } from './injectors/instant-setter-injector';
 export const instantInject = instantSetterInjector.decorator;

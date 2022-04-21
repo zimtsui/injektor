@@ -15,3 +15,9 @@ export class Unregistered extends Error {
 		super('Interface identifier is not registered.');
 	}
 }
+
+export class CircularConstructorInjection extends Error {
+	public constructor() {
+		super('Circular constructor injection.');
+	}
+}

@@ -10,43 +10,44 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ava_1 = require("ava");
-const assert = require("assert");
 const __1 = require("../..");
-const ALike = {};
-const BLike = {};
-(0, ava_1.default)('setter inj / ctor reg', async (t) => {
+const ALike = 'ALike';
+const BLike = 'BLike';
+(0, ava_1.default)('setter injection', async (t) => {
     const container = new __1.Container();
     class A {
     }
     __decorate([
-        (0, __1.setterInject)(BLike)
+        (0, __1.instantInject)(BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     container.registerConstructor(BLike, B);
-    const a1 = container.setterInject(new A());
-    const a2 = container.setterInject(new A());
-    assert(a1.b);
-    assert(a2.b);
-    assert(a1.b !== a2.b);
+    container.registerConstructor(ALike, A);
+    const a1 = container.initiate(ALike);
+    const a2 = container.initiate(ALike);
+    t.assert(a1.b);
+    t.assert(a2.b);
+    t.assert(a1.b !== a2.b);
 });
-(0, ava_1.default)('setter inj / ctor singleton reg', async (t) => {
+(0, ava_1.default)('setter injection singleton', async (t) => {
     const container = new __1.Container();
     class A {
     }
     __decorate([
-        (0, __1.setterInject)(BLike)
+        (0, __1.instantInject)(BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     container.registerConstructorSingleton(BLike, B);
-    const a1 = container.setterInject(new A());
-    const a2 = container.setterInject(new A());
-    assert(a1.b);
-    assert(a2.b);
-    assert(a1.b === a2.b);
+    container.registerConstructor(ALike, A);
+    const a1 = container.initiate(ALike);
+    const a2 = container.initiate(ALike);
+    t.assert(a1.b);
+    t.assert(a2.b);
+    t.assert(a1.b === a2.b);
 });
-(0, ava_1.default)('ctor inj', async (t) => {
+(0, ava_1.default)('constructor injection', async (t) => {
     const container = new __1.Container();
     let A = class A {
         constructor(b) {
@@ -54,63 +55,109 @@ const BLike = {};
         }
     };
     A = __decorate([
-        __param(0, (0, __1.ctorInject)(BLike))
+        __param(0, (0, __1.inject)(BLike))
+    ], A);
+    class B {
+    }
+    container.registerConstructor(BLike, B);
+    container.registerConstructor(ALike, A);
+    const a1 = container.initiate(ALike);
+    const a2 = container.initiate(ALike);
+    t.assert(a1 !== a2);
+    t.assert(a1.b);
+    t.assert(a2.b);
+    t.assert(a1.b !== a2.b);
+});
+(0, ava_1.default)('constructor injection singleton', async (t) => {
+    const container = new __1.Container();
+    let A = class A {
+        constructor(b) {
+            this.b = b;
+        }
+    };
+    A = __decorate([
+        __param(0, (0, __1.inject)(BLike))
     ], A);
     class B {
     }
     container.registerConstructorSingleton(BLike, B);
     container.registerConstructor(ALike, A);
+    container.initiate(BLike);
     const a1 = container.initiate(ALike);
     const a2 = container.initiate(ALike);
-    assert(a1 !== a2);
-    assert(a1.b);
-    assert(a2.b);
-    assert(a1.b === a2.b);
+    t.assert(a1 !== a2);
+    t.assert(a1.b);
+    t.assert(a2.b);
+    t.assert(a1.b === a2.b);
 });
-(0, ava_1.default)('circular', async (t) => {
+(0, ava_1.default)('circular setter injection', async (t) => {
     const container = new __1.Container();
     class A {
     }
     __decorate([
-        (0, __1.setterInject)(BLike)
+        (0, __1.instantInject)(BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     __decorate([
-        (0, __1.setterInject)(ALike)
+        (0, __1.instantInject)(ALike)
     ], B.prototype, "a", void 0);
-    const a = new A();
-    const b = new B();
-    container.registerFactory(ALike, () => a);
-    container.registerFactory(BLike, () => b);
-    container.setterInject(a);
-    container.setterInject(b);
-    assert(a.b);
-    assert(b.a);
-    assert(a.b === b);
-    assert(b.a === a);
+    container.registerConstructorSingleton(ALike, A);
+    container.registerConstructorSingleton(BLike, B);
+    const a = container.initiate(ALike);
+    const b = container.initiate(BLike);
+    t.assert(a.b);
+    t.assert(b.a);
+    t.assert(a.b === b);
+    t.assert(b.a === a);
 });
-(0, ava_1.default)('lazy circular', async (t) => {
+(0, ava_1.default)('circular lazy setter injection', async (t) => {
     const container = new __1.Container();
     class A {
     }
     __decorate([
-        (0, __1.setterInjectLazy)(BLike)
+        (0, __1.lazyInject)(BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     __decorate([
-        (0, __1.setterInjectLazy)(ALike)
+        (0, __1.lazyInject)(ALike)
     ], B.prototype, "a", void 0);
-    const a = new A();
-    const b = new B();
-    container.registerFactory(ALike, () => a);
-    container.registerFactory(BLike, () => b);
-    container.setterInject(a);
-    container.setterInject(b);
-    assert(a.b);
-    assert(b.a);
-    assert(a.b === b);
-    assert(b.a === a);
+    container.registerConstructorSingleton(ALike, A);
+    container.registerConstructorSingleton(BLike, B);
+    const a = container.initiate(ALike);
+    const b = container.initiate(BLike);
+    t.assert(a.b);
+    t.assert(b.a);
+    t.assert(a.b === b);
+    t.assert(b.a === a);
+});
+(0, ava_1.default)('circular constructor injection', async (t) => {
+    const container = new __1.Container();
+    let A = class A {
+        constructor(b) {
+            this.b = b;
+        }
+    };
+    A = __decorate([
+        __param(0, (0, __1.inject)(BLike))
+    ], A);
+    let B = class B {
+        constructor(a) {
+            this.a = a;
+        }
+    };
+    B = __decorate([
+        __param(0, (0, __1.inject)(ALike))
+    ], B);
+    container.registerConstructorSingleton(ALike, A);
+    container.registerConstructorSingleton(BLike, B);
+    try {
+        const a = container.initiate(ALike);
+        throw new Error('');
+    }
+    catch (err) {
+        t.assert(err instanceof __1.CircularConstructorInjection);
+    }
 });
 //# sourceMappingURL=test.js.map
