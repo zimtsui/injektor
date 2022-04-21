@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MultitionFactoryInsideProducer = void 0;
+exports.FactoryInsideMultitionProducer = void 0;
 const instant_setter_injector_1 = require("../injectors/instant-setter-injector");
 const lazy_setter_injection_1 = require("../injectors/lazy-setter-injection");
-class MultitionFactoryInsideProducer {
+class FactoryInsideMultitionProducer {
     constructor(factory, container) {
         this.factory = factory;
         this.container = container;
@@ -23,8 +23,8 @@ class MultitionFactoryInsideProducer {
         return instance;
     }
 }
-exports.MultitionFactoryInsideProducer = MultitionFactoryInsideProducer;
+exports.FactoryInsideMultitionProducer = FactoryInsideMultitionProducer;
 function isHost(x) {
     return typeof x === 'object' && x !== null;
 }
-//# sourceMappingURL=multition-factory-inside-producer.js.map
+//# sourceMappingURL=factory-inside-multition-producer.js.map

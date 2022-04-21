@@ -1,8 +1,8 @@
 import assert = require('assert');
 import { ContainerLike } from './container-like';
 import { Unregistered } from '../exceptions';
-import { MultitionFactoryInsideProducer } from '../producers/multition-factory-inside-producer';
-import { MultitionConstructorInsideProducer } from '../producers/multition-constructor-inside-producer';
+import { FactoryInsideMultitionProducer } from '../producers/factory-inside-multition-producer';
+import { ConstructorInsideMultitionProducer } from '../producers/constructor-inside-multition-producer';
 import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer';
 import { ConstructorInsideSingletonProducer } from '../producers/constructor-inside-singleton-producer';
 import { ProducerLike } from '../producers/producer-like';
@@ -33,7 +33,7 @@ export class Container implements ContainerLike {
 	): void {
 		this.registry.set(
 			id,
-			new MultitionConstructorInsideProducer(ctor, this),
+			new ConstructorInsideMultitionProducer(ctor, this),
 		);
 	}
 
@@ -53,7 +53,7 @@ export class Container implements ContainerLike {
 	): void {
 		this.registry.set(
 			id,
-			new MultitionFactoryInsideProducer(factory, this),
+			new FactoryInsideMultitionProducer(factory, this),
 		);
 	}
 

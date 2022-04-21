@@ -9,7 +9,7 @@ import { instantSetterInjector } from '../injectors/instant-setter-injector';
 import { lazySetterInjector } from '../injectors/lazy-setter-injection';
 
 
-export class MultitionFactoryInsideProducer<T extends Dep> implements MultitionProducerLike<T> {
+export class FactoryInsideMultitionProducer<T extends Dep> implements MultitionProducerLike<T> {
 	public constructor(
 		private factory: Factory<T>,
 		private container: ContainerLike,

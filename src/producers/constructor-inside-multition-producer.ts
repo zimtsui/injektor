@@ -4,18 +4,18 @@ import {
 	Ctor,
 } from '../interfaces';
 import { ContainerLike } from '../container/container-like';
-import { MultitionFactoryInsideProducer } from './multition-factory-inside-producer';
+import { FactoryInsideMultitionProducer } from './factory-inside-multition-producer';
 import { constructorInjector } from '../injectors/constructor-injector';
 
 
-export class MultitionConstructorInsideProducer<T extends Host> implements MultitionProducerLike<T> {
-	private factoryProducer: MultitionFactoryInsideProducer<T>;
+export class ConstructorInsideMultitionProducer<T extends Host> implements MultitionProducerLike<T> {
+	private factoryProducer: FactoryInsideMultitionProducer<T>;
 
 	public constructor(
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	) {
-		this.factoryProducer = new MultitionFactoryInsideProducer(
+		this.factoryProducer = new FactoryInsideMultitionProducer(
 			() => constructorInjector.inject<T>(ctor, container),
 			container,
 		);
