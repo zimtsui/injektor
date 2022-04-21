@@ -21,7 +21,7 @@ Injektor is a dependency SETTER injection framework.
 
 ## Basic usage
 
-### Simple
+### Constructor injection
 
 ```ts
 import assert = require('assert');
@@ -29,24 +29,79 @@ import {
 	inject,
 	Container,
 } from 'injektor';
+const container = new Container();
 
+interface ALike {}
+const ALike = {};
 interface BLike {}
 const BLike = {};
 
+class A implements ALike {
+	public constructor(
+		@inject(BLike)
+		public b: BLike,
+	) {}
+}
+class B implements BLike { }
+
+container.registerConstructor(ALike, A);
+container.registerConstructor(BLike, B);
+
+const a = container.initiate<ALike>(ALike);
+```
+
+### Instant setter injection
+
+```ts
+import assert = require('assert');
+import {
+	instantInject,
+	Container,
+} from 'injektor';
 const container = new Container();
-class A {
-	@inject(BLike)
+
+interface ALike {}
+const ALike = {};
+interface BLike {}
+const BLike = {};
+
+class A implements ALike {
+	@instantInject(BLike)
 	public b!: BLike;
 }
 class B implements BLike { }
 
-container.register(BLike, () => new B());
-const a1 = container.inject(new A());
-const a2 = container.inject(new A());
+container.registerConstructor(ALike, A);
+container.registerConstructor(BLike, B);
 
-assert(a1.b);
-assert(a2.b);
-assert(a1.b !== a2.b);
+const a = container.initiate<ALike>(ALike);
+```
+
+### Lazy setter injection
+
+```ts
+import assert = require('assert');
+import {
+	lazyInject,
+	Container,
+} from 'injektor';
+const container = new Container();
+
+interface ALike {}
+const ALike = {};
+interface BLike {}
+const BLike = {};
+
+class A implements ALike {
+	@lazyInject(BLike)
+	public b!: BLike;
+}
+class B implements BLike { }
+
+container.registerConstructor(ALike, A);
+container.registerConstructor(BLike, B);
+
+const a = container.initiate<ALike>(ALike);
 ```
 
 ### Singleton
@@ -58,24 +113,17 @@ import {
 	Container,
 } from 'injektor';
 
-interface BLike {}
-const BLike = {};
+interface ALike {}
+const ALike = {};
 
 const container = new Container();
-class A {
-	@inject(BLike)
-	public b!: BLike;
-}
-class B implements BLike { }
+class A implements ALike { }
 
-const b = new B();
-container.register(BLike, () => b);
-const a1 = container.inject(new A());
-const a2 = container.inject(new A());
+container.registerConstructorSingleton(ALike, A);
+const a1 = container.initiate<ALike>(ALike);
+const a2 = container.initiate<ALike>(ALike);
 
-assert(a1.b);
-assert(a2.b);
-assert(a1.b === a2.b);
+assert(a1 === a2);
 ```
 
 ### Circular Dependency
@@ -83,7 +131,7 @@ assert(a1.b === a2.b);
 ```ts
 import assert = require('assert');
 import {
-	inject,
+	instantInject,
 	Container,
 } from 'injektor';
 
@@ -94,23 +142,51 @@ const BLike = {};
 
 const container = new Container();
 class A implements ALike {
-	@inject(BLike)
+	@instantInject(BLike)
 	public b!: BLike;
 }
 class B implements BLike {
-	@inject(ALike)
+	@instantInject(ALike)
 	public a!: ALike;
 }
 
-const a = new A();
-const b = new B();
-container.register(ALike, () => a);
-container.register(BLike, () => b);
-container.inject<ALike>(a);
-container.inject<BLike>(b);
+container.registerConstructor(ALike, A);
+container.registerConstructor(BLike, B);
 
-assert(a.b);
-assert(b.a);
+const a = container.initiate<ALike>(ALike);
+const b = container.initiate<BLike>(BLike);
+
 assert(a.b === b);
 assert(b.a === a);
+```
+
+### Factory Dependency
+
+```ts
+import assert = require('assert');
+import {
+	inject,
+	Container,
+} from 'injektor';
+const container = new Container();
+
+interface ALike {}
+const ALike = {};
+interface BLike {}
+const BLike = {};
+
+class A implements ALike {
+	public constructor(
+		@inject(BLike)
+		public b!: BLike,
+	) { }
+}
+class B implements BLike { }
+
+container.registerFactorySingleton(ALike, () => new A(
+	container.initiate<BLike>(BLike),
+));
+container.registerFactorySingleton(BLike, () => new B());
+
+const a = container.initiate<ALike>(ALike);
 ```
