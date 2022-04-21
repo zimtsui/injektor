@@ -30,9 +30,3 @@ export interface ContainerLike {
 		factory: Factory<T>,
 	): void;
 }
-
-export class Unregistered extends Error {
-	public constructor() {
-		super('Interface identifier is not registered.');
-	}
-}

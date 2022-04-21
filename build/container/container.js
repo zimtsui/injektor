@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const assert = require("assert");
-const container_like_1 = require("./container-like");
+const exceptions_1 = require("../exceptions");
 const multition_factory_inside_producer_1 = require("../producers/multition-factory-inside-producer");
 const multition_constructor_inside_producer_1 = require("../producers/multition-constructor-inside-producer");
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
@@ -13,7 +13,7 @@ class Container {
     }
     initiate(id) {
         const producer = this.registry.get(id);
-        assert(typeof producer !== 'undefined', new container_like_1.Unregistered());
+        assert(typeof producer !== 'undefined', new exceptions_1.Unregistered());
         return producer.getInstance();
     }
     registerConstructor(id, ctor) {

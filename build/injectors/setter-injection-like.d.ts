@@ -7,6 +7,3 @@ export interface SetterInjectorLike extends InjectorLike {
     decorator: Decorator;
     inject<T extends Host>(host: T, container: ContainerLike): T;
 }
-export declare class NotInjected extends Error {
-    constructor(name: PropName);
-}

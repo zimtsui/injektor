@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instantSetterInjector = exports.InstantSetterInjector = void 0;
-const setter_injection_like_1 = require("./setter-injection-like");
+const exceptions_1 = require("../exceptions");
 class InstantSetterInjector {
     constructor() {
         this.table = new WeakMap();
@@ -13,7 +13,7 @@ class InstantSetterInjector {
                 configurable: true,
                 enumerable: false,
                 get() {
-                    throw new setter_injection_like_1.NotInjected(name);
+                    throw new exceptions_1.NotInjected(name);
                 },
                 set(value) {
                     Reflect.defineProperty(this, name, {

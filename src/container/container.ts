@@ -1,8 +1,6 @@
 import assert = require('assert');
-import {
-	ContainerLike,
-	Unregistered,
-} from './container-like';
+import { ContainerLike } from './container-like';
+import { Unregistered } from '../exceptions';
 import { MultitionFactoryInsideProducer } from '../producers/multition-factory-inside-producer';
 import { MultitionConstructorInsideProducer } from '../producers/multition-constructor-inside-producer';
 import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer';

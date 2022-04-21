@@ -6,6 +6,3 @@ export interface ContainerLike {
     registerFactory<T extends Dep>(id: Id, factory: Factory<T>): void;
     registerFactorySingleton<T extends Dep>(id: Id, factory: Factory<T>): void;
 }
-export declare class Unregistered extends Error {
-    constructor();
-}

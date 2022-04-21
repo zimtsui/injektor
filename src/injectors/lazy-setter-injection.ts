@@ -1,7 +1,5 @@
-import {
-	SetterInjectorLike,
-	NotInjected,
-} from './setter-injection-like';
+import { SetterInjectorLike } from './setter-injection-like';
+import { NotInjected } from '../exceptions';
 import {
 	Id,
 	Dep,

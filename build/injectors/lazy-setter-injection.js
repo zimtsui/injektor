@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazySetterInjector = exports.LazySetterInjector = void 0;
-const setter_injection_like_1 = require("./setter-injection-like");
+const exceptions_1 = require("../exceptions");
 const assert = require("assert");
 class LazySetterInjector {
     constructor() {
@@ -13,7 +13,7 @@ class LazySetterInjector {
                 enumerable: false,
                 get() {
                     const container = initiators.get(this);
-                    assert(typeof container !== 'undefined', new setter_injection_like_1.NotInjected(name));
+                    assert(typeof container !== 'undefined', new exceptions_1.NotInjected(name));
                     const value = container.initiate(id);
                     Reflect.defineProperty(this, name, {
                         value,
