@@ -82,13 +82,30 @@ const BLike = 'BLike';
     }
     container.registerConstructorSingleton(BLike, B);
     container.registerConstructor(ALike, A);
-    container.initiate(BLike);
     const a1 = container.initiate(ALike);
     const a2 = container.initiate(ALike);
     t.assert(a1 !== a2);
     t.assert(a1.b);
     t.assert(a2.b);
     t.assert(a1.b === a2.b);
+});
+(0, ava_1.default)('factory injection singleton', async (t) => {
+    const container = new __1.Container();
+    let A = class A {
+        constructor(b) {
+            this.b = b;
+        }
+    };
+    A = __decorate([
+        __param(0, (0, __1.inject)(BLike))
+    ], A);
+    class B {
+    }
+    container.registerFactorySingleton(ALike, () => new A(container.initiate(BLike)));
+    container.registerFactorySingleton(BLike, () => new B());
+    const a1 = container.initiate(ALike);
+    const a2 = container.initiate(ALike);
+    t.assert(a1 === a2);
 });
 (0, ava_1.default)('circular setter injection', async (t) => {
     const container = new __1.Container();

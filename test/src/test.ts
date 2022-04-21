@@ -87,7 +87,6 @@ test('constructor injection singleton', async t => {
 
 	container.registerConstructorSingleton(BLike, B);
 	container.registerConstructor(ALike, A);
-	container.initiate<BLike>(BLike);
 	const a1 = container.initiate<ALike>(ALike);
 	const a2 = container.initiate<ALike>(ALike);
 
@@ -95,6 +94,26 @@ test('constructor injection singleton', async t => {
 	t.assert(a1.b);
 	t.assert(a2.b);
 	t.assert(a1.b === a2.b);
+});
+
+test('factory injection singleton', async t => {
+	const container = new Container();
+	class A implements ALike {
+		public constructor(
+			@inject(BLike)
+			public b: BLike,
+		) { }
+	}
+	class B implements BLike { }
+
+	container.registerFactorySingleton(ALike, () => new A(
+		container.initiate(BLike),
+	));
+	container.registerFactorySingleton(BLike, () => new B());
+	const a1 = container.initiate<ALike>(ALike);
+	const a2 = container.initiate<ALike>(ALike);
+
+	t.assert(a1 === a2);
 });
 
 test('circular setter injection', async t => {
