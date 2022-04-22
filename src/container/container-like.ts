@@ -8,6 +8,8 @@ import {
 
 
 export interface ContainerLike {
+	duplicate(): ContainerLike;
+
 	initiate<T extends Dep>(id: Id): T;
 
 	registerConstructor<T extends Host>(

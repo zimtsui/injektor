@@ -3,6 +3,7 @@ import { MultitionProducerLike } from './multition-producer-like';
 import { Dep } from '../interfaces';
 import { CircularConstructorInjection } from '../exceptions';
 import assert = require('assert');
+import { ContainerLike } from '../container/container-like';
 
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{
@@ -12,6 +13,8 @@ export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T
 	public constructor(
 		private producer: MultitionProducerLike<T>,
 	) { }
+
+	public abstract duplicate(container: ContainerLike): SingletonProducer<T>;
 
 	public getInstance(): T {
 		if (typeof this.singleton === 'undefined') {

@@ -5,6 +5,7 @@ export declare class FactoryInsideMultitionProducer<T extends Dep> implements Mu
     private factory;
     private container;
     constructor(factory: Factory<T>, container: ContainerLike);
+    duplicate(container: ContainerLike): FactoryInsideMultitionProducer<T>;
     getInstance(): T;
     getInstanceWithoutSetterInjection(): T;
     setterInject(instance: T): T;

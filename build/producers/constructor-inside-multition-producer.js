@@ -5,7 +5,11 @@ const factory_inside_multition_producer_1 = require("./factory-inside-multition-
 const constructor_injector_1 = require("../injectors/constructor-injector");
 class ConstructorInsideMultitionProducer {
     constructor(ctor, container) {
+        this.ctor = ctor;
         this.factoryProducer = new factory_inside_multition_producer_1.FactoryInsideMultitionProducer(() => constructor_injector_1.constructorInjector.inject(ctor, container), container);
+    }
+    duplicate(container) {
+        return new ConstructorInsideMultitionProducer(this.ctor, container);
     }
     getInstance() {
         return this.factoryProducer.getInstance();

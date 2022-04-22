@@ -8,8 +8,15 @@ const constructor_inside_multition_producer_1 = require("../producers/constructo
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
 const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
 class Container {
-    constructor() {
+    constructor(parent) {
         this.registry = new Map();
+        if (typeof parent === 'undefined')
+            return;
+        for (const [id, producer] of parent.registry)
+            this.registry.set(id, producer.duplicate(this));
+    }
+    duplicate() {
+        return new Container(this);
     }
     initiate(id) {
         const producer = this.registry.get(id);

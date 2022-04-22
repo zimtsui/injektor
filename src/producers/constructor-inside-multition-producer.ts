@@ -12,11 +12,18 @@ export class ConstructorInsideMultitionProducer<T extends Host> implements Multi
 	private factoryProducer: FactoryInsideMultitionProducer<T>;
 
 	public constructor(
-		ctor: Ctor<T>,
+		private ctor: Ctor<T>,
 		container: ContainerLike,
 	) {
 		this.factoryProducer = new FactoryInsideMultitionProducer(
 			() => constructorInjector.inject<T>(ctor, container),
+			container,
+		);
+	}
+
+	public duplicate(container: ContainerLike) {
+		return new ConstructorInsideMultitionProducer(
+			this.ctor,
 			container,
 		);
 	}

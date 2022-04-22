@@ -7,6 +7,10 @@ class FactoryInsideSingletonProducer extends singleton_producer_1.SingletonProdu
     constructor(factory, container) {
         const producer = new factory_inside_multition_producer_1.FactoryInsideMultitionProducer(factory, container);
         super(producer);
+        this.factory = factory;
+    }
+    duplicate(container) {
+        return new FactoryInsideSingletonProducer(this.factory, container);
     }
 }
 exports.FactoryInsideSingletonProducer = FactoryInsideSingletonProducer;

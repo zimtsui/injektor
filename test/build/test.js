@@ -80,8 +80,8 @@ const BLike = 'BLike';
     ], A);
     class B {
     }
-    container.registerConstructorSingleton(BLike, B);
     container.registerConstructor(ALike, A);
+    container.registerConstructorSingleton(BLike, B);
     const a1 = container.initiate(ALike);
     const a2 = container.initiate(ALike);
     t.assert(a1 !== a2);
@@ -176,5 +176,28 @@ const BLike = 'BLike';
     catch (err) {
         t.assert(err instanceof __1.CircularConstructorInjection);
     }
+});
+(0, ava_1.default)('duplicate', async (t) => {
+    const container1 = new __1.Container();
+    let A = class A {
+        constructor(b) {
+            this.b = b;
+        }
+    };
+    A = __decorate([
+        __param(0, (0, __1.inject)(BLike))
+    ], A);
+    class B {
+    }
+    container1.registerConstructor(ALike, A);
+    container1.registerConstructorSingleton(BLike, B);
+    const container2 = container1.duplicate();
+    const c1a1 = container1.initiate(ALike);
+    const c1a2 = container1.initiate(ALike);
+    const c2a1 = container2.initiate(ALike);
+    const c2a2 = container2.initiate(ALike);
+    t.assert(c2a1 !== c2a2);
+    t.assert(c1a1.b === c1a2.b);
+    t.assert(c1a1.b !== c2a1.b);
 });
 //# sourceMappingURL=test.js.map

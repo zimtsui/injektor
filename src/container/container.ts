@@ -18,6 +18,18 @@ import {
 export class Container implements ContainerLike {
 	private registry = new Map<Id, ProducerLike<Dep>>();
 
+	public constructor(parent: Container)
+	public constructor()
+	public constructor(parent?: Container) {
+		if (typeof parent === 'undefined') return;
+		for (const [id, producer] of parent.registry)
+			this.registry.set(id, producer.duplicate(this));
+	}
+
+	public duplicate(): ContainerLike {
+		return new Container(this);
+	}
+
 	public initiate<T extends Dep>(id: Id): T {
 		const producer = <ProducerLike<T> | undefined>this.registry.get(id);
 		assert(
