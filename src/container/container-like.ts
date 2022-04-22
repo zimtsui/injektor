@@ -7,33 +7,64 @@ import {
 } from '../interfaces';
 
 
-export interface ContainerLike {
-	duplicate(): ContainerLike;
+export abstract class ContainerLike {
+	public abstract duplicate(): ContainerLike;
 
-	initiate<T extends Dep>(id: Id): T;
+	public abstract initiate<T extends Dep>(id: Id): T;
 
-	registerConstructor<T extends Host>(
+	public abstract registerConstructor<T extends Host>(
 		id: Id,
-		constructor: Ctor<T>,
+		ctor: Ctor<T>,
 	): void;
-
-	registerConstructorSingleton<T extends Host>(
+	public rc<T extends Host>(
 		id: Id,
-		constructor: Ctor<T>,
-	): void;
+		ctor: Ctor<T>,
+	): void {
+		return this.registerConstructor(id, ctor)
+	}
 
-	registerFactory<T extends Dep>(
+	public abstract registerConstructorSingleton<T extends Host>(
+		id: Id,
+		ctor: Ctor<T>,
+	): void;
+	public rcs<T extends Host>(
+		id: Id,
+		ctor: Ctor<T>,
+	): void {
+		return this.registerConstructorSingleton(id, ctor);
+	}
+
+	public abstract registerFactory<T extends Dep>(
 		id: Id,
 		factory: Factory<T>,
 	): void;
+	public rf<T extends Dep>(
+		id: Id,
+		factory: Factory<T>,
+	): void {
+		return this.registerFactory(id, factory);
+	}
 
-	registerFactorySingleton<T extends Dep>(
+	public abstract registerFactorySingleton<T extends Dep>(
 		id: Id,
 		factory: Factory<T>,
 	): void;
+	public rfs<T extends Dep>(
+		id: Id,
+		factory: Factory<T>,
+	): void {
+		return this.registerFactorySingleton(id, factory);
+	}
 
-	registerAlias<T extends Dep>(
+	public abstract registerAlias(
 		id: Id,
 		alias: Id,
 	): void;
+	public ra(
+		id: Id,
+		alias: Id,
+	): void {
+		return this.registerAlias(id, alias);
+	}
+
 }

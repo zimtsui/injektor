@@ -16,7 +16,7 @@ import {
 } from '../interfaces';
 
 
-export class Container implements ContainerLike {
+export class Container extends ContainerLike {
 	private registry = new Map<Id, ProducerLike<Dep>>();
 
 	public duplicate(): ContainerLike {
@@ -78,7 +78,7 @@ export class Container implements ContainerLike {
 		);
 	}
 
-	public registerAlias<T extends Dep>(
+	public registerAlias(
 		id: Id,
 		alias: Id,
 	): void {

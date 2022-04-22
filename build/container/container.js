@@ -2,14 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const assert = require("assert");
+const container_like_1 = require("./container-like");
 const exceptions_1 = require("../exceptions");
 const factory_inside_multition_producer_1 = require("../producers/factory-inside-multition-producer");
 const constructor_inside_multition_producer_1 = require("../producers/constructor-inside-multition-producer");
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
 const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
 const alias_producer_1 = require("../producers/alias-producer");
-class Container {
+class Container extends container_like_1.ContainerLike {
     constructor() {
+        super(...arguments);
         this.registry = new Map();
     }
     duplicate() {
