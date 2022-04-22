@@ -11,6 +11,9 @@ export abstract class ContainerLike {
 	public abstract duplicate(): ContainerLike;
 
 	public abstract initiate<T extends Dep>(id: Id): T;
+	public i<T extends Dep>(id: Id): T {
+		return this.initiate<T>(id);
+	}
 
 	public abstract registerConstructor<T extends Host>(
 		id: Id,

@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerLike = void 0;
 class ContainerLike {
+    i(id) {
+        return this.initiate(id);
+    }
     rc(id, ctor) {
         return this.registerConstructor(id, ctor);
     }

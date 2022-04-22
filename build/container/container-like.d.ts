@@ -2,6 +2,7 @@ import { Id, Dep, Factory, Ctor, Host } from '../interfaces';
 export declare abstract class ContainerLike {
     abstract duplicate(): ContainerLike;
     abstract initiate<T extends Dep>(id: Id): T;
+    i<T extends Dep>(id: Id): T;
     abstract registerConstructor<T extends Host>(id: Id, ctor: Ctor<T>): void;
     rc<T extends Host>(id: Id, ctor: Ctor<T>): void;
     abstract registerConstructorSingleton<T extends Host>(id: Id, ctor: Ctor<T>): void;
