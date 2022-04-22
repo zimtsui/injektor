@@ -67,4 +67,14 @@ export abstract class ContainerLike {
 		return this.registerAlias(id, alias);
 	}
 
+	public abstract registerValue(
+		id: Id,
+		value: Dep,
+	): void;
+	public rv(
+		id: Id,
+		value: Dep,
+	): void {
+		return this.registerValue(id, value);
+	}
 }

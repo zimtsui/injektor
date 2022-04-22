@@ -17,6 +17,9 @@ class ContainerLike {
     ra(id, alias) {
         return this.registerAlias(id, alias);
     }
+    rv(id, value) {
+        return this.registerValue(id, value);
+    }
 }
 exports.ContainerLike = ContainerLike;
 //# sourceMappingURL=container-like.js.map

@@ -9,6 +9,7 @@ const constructor_inside_multition_producer_1 = require("../producers/constructo
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
 const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
 const alias_producer_1 = require("../producers/alias-producer");
+const value_producer_1 = require("../producers/value-producer");
 class Container extends container_like_1.ContainerLike {
     constructor() {
         super(...arguments);
@@ -39,6 +40,9 @@ class Container extends container_like_1.ContainerLike {
     }
     registerAlias(id, alias) {
         this.registry.set(id, new alias_producer_1.AliasProducer(alias, this));
+    }
+    registerValue(id, value) {
+        this.registry.set(id, new value_producer_1.ValueProducer(value));
     }
 }
 exports.Container = Container;

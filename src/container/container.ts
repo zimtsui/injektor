@@ -6,6 +6,7 @@ import { ConstructorInsideMultitionProducer } from '../producers/constructor-ins
 import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer';
 import { ConstructorInsideSingletonProducer } from '../producers/constructor-inside-singleton-producer';
 import { AliasProducer } from '../producers/alias-producer';
+import { ValueProducer } from '../producers/value-producer';
 import { ProducerLike } from '../producers/producer-like';
 import {
 	Id,
@@ -85,6 +86,16 @@ export class Container extends ContainerLike {
 		this.registry.set(
 			id,
 			new AliasProducer(alias, this),
+		);
+	}
+
+	public registerValue(
+		id: Id,
+		value: Dep,
+	): void {
+		this.registry.set(
+			id,
+			new ValueProducer(value),
 		);
 	}
 }
