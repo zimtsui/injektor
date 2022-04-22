@@ -31,4 +31,9 @@ export interface ContainerLike {
 		id: Id,
 		factory: Factory<T>,
 	): void;
+
+	registerAlias<T extends Dep>(
+		id: Id,
+		alias: Id,
+	): void;
 }

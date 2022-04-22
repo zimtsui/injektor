@@ -7,16 +7,16 @@ const factory_inside_multition_producer_1 = require("../producers/factory-inside
 const constructor_inside_multition_producer_1 = require("../producers/constructor-inside-multition-producer");
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
 const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
+const alias_producer_1 = require("../producers/alias-producer");
 class Container {
-    constructor(parent) {
+    constructor() {
         this.registry = new Map();
-        if (typeof parent === 'undefined')
-            return;
-        for (const [id, producer] of parent.registry)
-            this.registry.set(id, producer.duplicate(this));
     }
     duplicate() {
-        return new Container(this);
+        const container = new Container();
+        for (const [id, producer] of this.registry)
+            container.registry.set(id, producer.duplicate(container));
+        return container;
     }
     initiate(id) {
         const producer = this.registry.get(id);
@@ -34,6 +34,9 @@ class Container {
     }
     registerFactorySingleton(id, factory) {
         this.registry.set(id, new factory_inside_singleton_producer_1.FactoryInsideSingletonProducer(factory, this));
+    }
+    registerAlias(id, alias) {
+        this.registry.set(id, new alias_producer_1.AliasProducer(alias, this));
     }
 }
 exports.Container = Container;

@@ -6,4 +6,5 @@ export interface ContainerLike {
     registerConstructorSingleton<T extends Host>(id: Id, constructor: Ctor<T>): void;
     registerFactory<T extends Dep>(id: Id, factory: Factory<T>): void;
     registerFactorySingleton<T extends Dep>(id: Id, factory: Factory<T>): void;
+    registerAlias<T extends Dep>(id: Id, alias: Id): void;
 }

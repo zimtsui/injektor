@@ -5,6 +5,7 @@ import { FactoryInsideMultitionProducer } from '../producers/factory-inside-mult
 import { ConstructorInsideMultitionProducer } from '../producers/constructor-inside-multition-producer';
 import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer';
 import { ConstructorInsideSingletonProducer } from '../producers/constructor-inside-singleton-producer';
+import { AliasProducer } from '../producers/alias-producer';
 import { ProducerLike } from '../producers/producer-like';
 import {
 	Id,
@@ -18,16 +19,14 @@ import {
 export class Container implements ContainerLike {
 	private registry = new Map<Id, ProducerLike<Dep>>();
 
-	public constructor(parent: Container)
-	public constructor()
-	public constructor(parent?: Container) {
-		if (typeof parent === 'undefined') return;
-		for (const [id, producer] of parent.registry)
-			this.registry.set(id, producer.duplicate(this));
-	}
-
 	public duplicate(): ContainerLike {
-		return new Container(this);
+		const container = new Container();
+		for (const [id, producer] of this.registry)
+			container.registry.set(
+				id,
+				producer.duplicate(container),
+			);
+		return container;
 	}
 
 	public initiate<T extends Dep>(id: Id): T {
@@ -76,6 +75,16 @@ export class Container implements ContainerLike {
 		this.registry.set(
 			id,
 			new FactoryInsideSingletonProducer(factory, this),
+		);
+	}
+
+	public registerAlias<T extends Dep>(
+		id: Id,
+		alias: Id,
+	): void {
+		this.registry.set(
+			id,
+			new AliasProducer(alias, this),
 		);
 	}
 }

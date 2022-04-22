@@ -200,4 +200,15 @@ const BLike = 'BLike';
     t.assert(c1a1.b === c1a2.b);
     t.assert(c1a1.b !== c2a1.b);
 });
+(0, ava_1.default)('alias', async (t) => {
+    const container = new __1.Container();
+    class A {
+    }
+    const ALikeAlias = {};
+    container.registerConstructorSingleton(ALike, A);
+    container.registerAlias(ALikeAlias, ALike);
+    const a1 = container.initiate(ALike);
+    const a2 = container.initiate(ALikeAlias);
+    t.assert(a1 === a2);
+});
 //# sourceMappingURL=test.js.map

@@ -211,3 +211,17 @@ test('duplicate', async t => {
 	t.assert(c1a1.b === c1a2.b);
 	t.assert(c1a1.b !== c2a1.b);
 });
+
+test('alias', async t => {
+	const container = new Container();
+	class A implements ALike { }
+	interface ALikeAlias extends ALike { }
+	const ALikeAlias = {};
+
+	container.registerConstructorSingleton(ALike, A);
+	container.registerAlias(ALikeAlias, ALike);
+	const a1 = container.initiate<ALike>(ALike);
+	const a2 = container.initiate<ALikeAlias>(ALikeAlias);
+
+	t.assert(a1 === a2);
+});
