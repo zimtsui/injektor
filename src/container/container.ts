@@ -20,7 +20,7 @@ import {
 export class Container extends ContainerLike {
 	private registry = new Map<Id, ProducerLike<Dep>>();
 
-	public duplicate(): ContainerLike {
+	public duplicate(): Container {
 		const container = new Container();
 		for (const [id, producer] of this.registry)
 			container.registry.set(
