@@ -89,9 +89,9 @@ export class Container extends ContainerLike {
 		);
 	}
 
-	public registerValue(
+	public registerValue<T extends Dep>(
 		id: Id,
-		value: Dep,
+		value: T,
 	): void {
 		this.registry.set(
 			id,

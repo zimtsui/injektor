@@ -13,6 +13,6 @@ export declare abstract class ContainerLike {
     rfs<T extends Dep>(id: Id, factory: Factory<T>): void;
     abstract registerAlias(id: Id, alias: Id): void;
     ra(id: Id, alias: Id): void;
-    abstract registerValue(id: Id, value: Dep): void;
-    rv(id: Id, value: Dep): void;
+    abstract registerValue<T extends Dep>(id: Id, value: T): void;
+    rv<T extends Dep>(id: Id, value: T): void;
 }

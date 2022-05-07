@@ -70,13 +70,13 @@ export abstract class ContainerLike {
 		return this.registerAlias(id, alias);
 	}
 
-	public abstract registerValue(
+	public abstract registerValue<T extends Dep>(
 		id: Id,
-		value: Dep,
+		value: T,
 	): void;
-	public rv(
+	public rv<T extends Dep>(
 		id: Id,
-		value: Dep,
+		value: T,
 	): void {
 		return this.registerValue(id, value);
 	}

@@ -9,5 +9,5 @@ export declare class Container extends ContainerLike {
     registerFactory<T extends Dep>(id: Id, factory: Factory<T>): void;
     registerFactorySingleton<T extends Dep>(id: Id, factory: Factory<T>): void;
     registerAlias(id: Id, alias: Id): void;
-    registerValue(id: Id, value: Dep): void;
+    registerValue<T extends Dep>(id: Id, value: T): void;
 }
