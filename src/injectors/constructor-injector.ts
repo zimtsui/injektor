@@ -8,7 +8,7 @@ import { PropName } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 import assert = require('assert');
 import { InjectorLike } from './injector-like';
-import { Unregistered } from '../exceptions';
+import { Unregistered, NotContructorInjected } from '../exceptions';
 
 
 export type Marks = (Id | undefined)[];
@@ -31,8 +31,15 @@ export class ConstructorInjector implements InjectorLike {
 		container: ContainerLike,
 	): T {
 		const marks = this.getMarks(ctor);
+		assert(
+			marks.length === ctor.length,
+			new NotContructorInjected(ctor.length),
+		);
 		const deps = marks.map(id => {
-			assert(typeof id !== 'undefined');
+			assert(
+				typeof id !== 'undefined',
+				new Unregistered(),
+			);
 			const f = <(() => Dep) | undefined>container[id];
 			assert(
 				typeof f !== 'undefined',

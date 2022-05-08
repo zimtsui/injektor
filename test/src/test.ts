@@ -5,7 +5,9 @@ import {
 	lazyInject,
 	instantInject,
 	CircularConstructorInjection,
+	NotContructorInjected
 } from '../..';
+import assert = require('assert');
 
 
 namespace TYPES {
@@ -255,12 +257,11 @@ test('alias', async t => {
 });
 
 
-test('abstract ', async t => {
+test('abstract', async t => {
 	abstract class AbstractContainer extends BaseContainer {
 		public abstract [TYPES.ALike]: () => ALike;
 	}
 	class A implements ALike { }
-	interface ALikeAlias extends ALike { }
 
 	class Container extends AbstractContainer {
 		public [TYPES.ALike] = this.rc<ALike>(A);
@@ -268,4 +269,24 @@ test('abstract ', async t => {
 
 	const container = new Container();
 	const a1 = container[TYPES.ALike]();
+});
+
+
+test('args length', async t => {
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rc<BLike>(B);
+	}
+	class A implements ALike {
+		public constructor(
+			public b: BLike,
+		) { }
+	}
+	class B implements BLike { }
+
+	const container = new Container();
+	assert.throws(
+		() => container[TYPES.ALike](),
+		NotContructorInjected,
+	);
 });

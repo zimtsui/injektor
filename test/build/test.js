@@ -11,6 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ava_1 = require("ava");
 const __1 = require("../..");
+const assert = require("assert");
 var TYPES;
 (function (TYPES) {
     TYPES.ALike = Symbol();
@@ -284,7 +285,7 @@ var TYPES;
     const a2 = container[TYPES.ALikeAlias]();
     t.assert(a1 === a2);
 });
-(0, ava_1.default)('abstract ', async (t) => {
+(0, ava_1.default)('abstract', async (t) => {
     var _a;
     class AbstractContainer extends __1.BaseContainer {
     }
@@ -299,5 +300,25 @@ var TYPES;
     _a = TYPES.ALike;
     const container = new Container();
     const a1 = container[TYPES.ALike]();
+});
+(0, ava_1.default)('args length', async (t) => {
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rc(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
+    class A {
+        constructor(b) {
+            this.b = b;
+        }
+    }
+    class B {
+    }
+    const container = new Container();
+    assert.throws(() => container[TYPES.ALike](), __1.NotContructorInjected);
 });
 //# sourceMappingURL=test.js.map

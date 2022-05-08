@@ -1,5 +1,5 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { NotInjected, Unregistered } from '../exceptions';
+import { NotSetterInjected, Unregistered } from '../exceptions';
 import {
 	Id,
 	Dep,
@@ -32,7 +32,7 @@ export class InstantSetterInjector implements SetterInjectorLike {
 				configurable: true,
 				enumerable: false,
 				get(): never {
-					throw new NotInjected(name);
+					throw new NotSetterInjected(name);
 				},
 				set(value: Dep): void {
 					Reflect.defineProperty(

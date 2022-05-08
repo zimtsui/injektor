@@ -14,8 +14,9 @@ class ConstructorInjector {
     }
     inject(ctor, container) {
         const marks = this.getMarks(ctor);
+        assert(marks.length === ctor.length, new exceptions_1.NotContructorInjected(ctor.length));
         const deps = marks.map(id => {
-            assert(typeof id !== 'undefined');
+            assert(typeof id !== 'undefined', new exceptions_1.Unregistered());
             const f = container[id];
             assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
             return f();

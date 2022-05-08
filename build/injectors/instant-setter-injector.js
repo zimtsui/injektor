@@ -14,7 +14,7 @@ class InstantSetterInjector {
                 configurable: true,
                 enumerable: false,
                 get() {
-                    throw new exceptions_1.NotInjected(name);
+                    throw new exceptions_1.NotSetterInjected(name);
                 },
                 set(value) {
                     Reflect.defineProperty(this, name, {

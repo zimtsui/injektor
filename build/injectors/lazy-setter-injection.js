@@ -13,7 +13,7 @@ class LazySetterInjector {
                 enumerable: false,
                 get() {
                     const container = initiators.get(this);
-                    assert(typeof container !== 'undefined', new exceptions_1.NotInjected(name));
+                    assert(typeof container !== 'undefined', new exceptions_1.NotSetterInjected(name));
                     const f = container[id];
                     assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
                     const value = f();
