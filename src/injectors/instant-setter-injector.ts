@@ -1,5 +1,5 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { NotInjected } from '../exceptions';
+import { NotInjected, Unregistered } from '../exceptions';
 import {
 	Id,
 	Dep,
@@ -10,6 +10,8 @@ import {
 	Proto,
 } from './injector-like';
 import { ContainerLike } from '../container/container-like';
+import assert = require('assert');
+
 
 
 export class InstantSetterInjector implements SetterInjectorLike {
@@ -54,7 +56,12 @@ export class InstantSetterInjector implements SetterInjectorLike {
 	): T {
 		const marks = this.getMarks(host);
 		for (const [name, id] of marks) {
-			const value = container.initiate(id);
+			const f = <(() => Dep) | undefined>container[id];
+			assert(
+				typeof f !== 'undefined',
+				new Unregistered(),
+			);
+			const value = f();
 			Reflect.set(
 				host,
 				name,

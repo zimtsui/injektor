@@ -2,26 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerLike = void 0;
 class ContainerLike {
-    i(id) {
-        return this.initiate(id);
+    rc(ctor) {
+        return this.registerConstructor(ctor);
     }
-    rc(id, ctor) {
-        return this.registerConstructor(id, ctor);
+    rcs(ctor) {
+        return this.registerConstructorSingleton(ctor);
     }
-    rcs(id, ctor) {
-        return this.registerConstructorSingleton(id, ctor);
+    rf(factory) {
+        return this.registerFactory(factory);
     }
-    rf(id, factory) {
-        return this.registerFactory(id, factory);
+    rfs(factory) {
+        return this.registerFactorySingleton(factory);
     }
-    rfs(id, factory) {
-        return this.registerFactorySingleton(id, factory);
-    }
-    ra(id, alias) {
-        return this.registerAlias(id, alias);
-    }
-    rv(id, value) {
-        return this.registerValue(id, value);
+    rv(value) {
+        return this.registerValue(value);
     }
 }
 exports.ContainerLike = ContainerLike;

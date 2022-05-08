@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.constructorInjector = exports.ConstructorInjector = void 0;
 const assert = require("assert");
+const exceptions_1 = require("../exceptions");
 class ConstructorInjector {
     constructor() {
         this.table = new WeakMap();
@@ -15,7 +16,9 @@ class ConstructorInjector {
         const marks = this.getMarks(ctor);
         const deps = marks.map(id => {
             assert(typeof id !== 'undefined');
-            return container.initiate(id);
+            const f = container[id];
+            assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
+            return f();
         });
         return new ctor(...deps);
     }

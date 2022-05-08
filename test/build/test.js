@@ -11,153 +11,214 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ava_1 = require("ava");
 const __1 = require("../..");
-const ALike = 'ALike';
-const BLike = 'BLike';
+var TYPES;
+(function (TYPES) {
+    TYPES.ALike = Symbol();
+    TYPES.BLike = Symbol();
+    TYPES.ALikeAlias = Symbol();
+})(TYPES || (TYPES = {}));
 (0, ava_1.default)('setter injection', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rc(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     class A {
     }
     __decorate([
-        (0, __1.instantInject)(BLike)
+        (0, __1.instantInject)(TYPES.BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
-    container.registerConstructor(BLike, B);
-    container.registerConstructor(ALike, A);
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALike);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALike]();
     t.assert(a1.b);
     t.assert(a2.b);
     t.assert(a1.b !== a2.b);
 });
 (0, ava_1.default)('setter injection singleton', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     class A {
     }
     __decorate([
-        (0, __1.instantInject)(BLike)
+        (0, __1.instantInject)(TYPES.BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
-    container.registerConstructorSingleton(BLike, B);
-    container.registerConstructor(ALike, A);
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALike);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALike]();
     t.assert(a1.b);
     t.assert(a2.b);
     t.assert(a1.b === a2.b);
 });
 (0, ava_1.default)('constructor injection', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rc(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     let A = class A {
         constructor(b) {
             this.b = b;
         }
     };
     A = __decorate([
-        __param(0, (0, __1.inject)(BLike))
+        __param(0, (0, __1.inject)(TYPES.BLike))
     ], A);
     class B {
     }
-    container.registerConstructor(BLike, B);
-    container.registerConstructor(ALike, A);
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALike);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALike]();
     t.assert(a1 !== a2);
     t.assert(a1.b);
     t.assert(a2.b);
     t.assert(a1.b !== a2.b);
 });
 (0, ava_1.default)('constructor injection singleton', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     let A = class A {
         constructor(b) {
             this.b = b;
         }
     };
     A = __decorate([
-        __param(0, (0, __1.inject)(BLike))
+        __param(0, (0, __1.inject)(TYPES.BLike))
     ], A);
     class B {
     }
-    container.registerConstructor(ALike, A);
-    container.registerConstructorSingleton(BLike, B);
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALike);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALike]();
     t.assert(a1 !== a2);
     t.assert(a1.b);
     t.assert(a2.b);
     t.assert(a1.b === a2.b);
 });
 (0, ava_1.default)('factory injection singleton', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rfs(() => new A(this[TYPES.BLike]()));
+            this[_b] = this.rfs(() => new B());
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     let A = class A {
         constructor(b) {
             this.b = b;
         }
     };
     A = __decorate([
-        __param(0, (0, __1.inject)(BLike))
+        __param(0, (0, __1.inject)(TYPES.BLike))
     ], A);
     class B {
     }
-    container.registerFactorySingleton(ALike, () => new A(container.initiate(BLike)));
-    container.registerFactorySingleton(BLike, () => new B());
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALike);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALike]();
     t.assert(a1 === a2);
 });
 (0, ava_1.default)('circular setter injection', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rcs(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     class A {
     }
     __decorate([
-        (0, __1.instantInject)(BLike)
+        (0, __1.instantInject)(TYPES.BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     __decorate([
-        (0, __1.instantInject)(ALike)
+        (0, __1.instantInject)(TYPES.ALike)
     ], B.prototype, "a", void 0);
-    container.registerConstructorSingleton(ALike, A);
-    container.registerConstructorSingleton(BLike, B);
-    const a = container.initiate(ALike);
-    const b = container.initiate(BLike);
+    const container = new Container();
+    const a = container[TYPES.ALike]();
+    const b = container[TYPES.BLike]();
     t.assert(a.b);
     t.assert(b.a);
     t.assert(a.b === b);
     t.assert(b.a === a);
 });
 (0, ava_1.default)('circular lazy setter injection', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rcs(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     class A {
     }
     __decorate([
-        (0, __1.lazyInject)(BLike)
+        (0, __1.lazyInject)(TYPES.BLike)
     ], A.prototype, "b", void 0);
     class B {
     }
     __decorate([
-        (0, __1.lazyInject)(ALike)
+        (0, __1.lazyInject)(TYPES.ALike)
     ], B.prototype, "a", void 0);
-    container.registerConstructorSingleton(ALike, A);
-    container.registerConstructorSingleton(BLike, B);
-    const a = container.initiate(ALike);
-    const b = container.initiate(BLike);
+    const container = new Container();
+    const a = container[TYPES.ALike]();
+    const b = container[TYPES.BLike]();
     t.assert(a.b);
     t.assert(b.a);
     t.assert(a.b === b);
     t.assert(b.a === a);
 });
 (0, ava_1.default)('circular constructor injection', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rcs(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     let A = class A {
         constructor(b) {
             this.b = b;
         }
     };
     A = __decorate([
-        __param(0, (0, __1.inject)(BLike))
+        __param(0, (0, __1.inject)(TYPES.BLike))
     ], A);
     let B = class B {
         constructor(a) {
@@ -165,12 +226,11 @@ const BLike = 'BLike';
         }
     };
     B = __decorate([
-        __param(0, (0, __1.inject)(ALike))
+        __param(0, (0, __1.inject)(TYPES.ALike))
     ], B);
-    container.registerConstructorSingleton(ALike, A);
-    container.registerConstructorSingleton(BLike, B);
+    const container = new Container();
     try {
-        const a = container.initiate(ALike);
+        const a = container[TYPES.ALike]();
         throw new Error('');
     }
     catch (err) {
@@ -178,37 +238,66 @@ const BLike = 'BLike';
     }
 });
 (0, ava_1.default)('duplicate', async (t) => {
-    const container1 = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
     let A = class A {
         constructor(b) {
             this.b = b;
         }
     };
     A = __decorate([
-        __param(0, (0, __1.inject)(BLike))
+        __param(0, (0, __1.inject)(TYPES.BLike))
     ], A);
     class B {
     }
-    container1.registerConstructor(ALike, A);
-    container1.registerConstructorSingleton(BLike, B);
-    const container2 = container1.duplicate();
-    const c1a1 = container1.initiate(ALike);
-    const c1a2 = container1.initiate(ALike);
-    const c2a1 = container2.initiate(ALike);
-    const c2a2 = container2.initiate(ALike);
+    const container1 = new Container();
+    const container2 = new Container();
+    const c1a1 = container1[TYPES.ALike]();
+    const c1a2 = container1[TYPES.ALike]();
+    const c2a1 = container2[TYPES.ALike]();
+    const c2a2 = container2[TYPES.ALike]();
     t.assert(c2a1 !== c2a2);
     t.assert(c1a1.b === c1a2.b);
     t.assert(c1a1.b !== c2a1.b);
 });
 (0, ava_1.default)('alias', async (t) => {
-    const container = new __1.Container();
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rcs(A);
+            this[_b] = () => this[TYPES.ALike]();
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.ALikeAlias;
     class A {
     }
-    const ALikeAlias = {};
-    container.registerConstructorSingleton(ALike, A);
-    container.registerAlias(ALikeAlias, ALike);
-    const a1 = container.initiate(ALike);
-    const a2 = container.initiate(ALikeAlias);
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
+    const a2 = container[TYPES.ALikeAlias]();
     t.assert(a1 === a2);
+});
+(0, ava_1.default)('abstract ', async (t) => {
+    var _a;
+    class AbstractContainer extends __1.BaseContainer {
+    }
+    class A {
+    }
+    class Container extends AbstractContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(A);
+        }
+    }
+    _a = TYPES.ALike;
+    const container = new Container();
+    const a1 = container[TYPES.ALike]();
 });
 //# sourceMappingURL=test.js.map

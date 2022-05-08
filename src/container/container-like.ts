@@ -8,76 +8,50 @@ import {
 
 
 export abstract class ContainerLike {
-	public abstract duplicate(): ContainerLike;
-
-	public abstract initiate<T extends Dep>(id: Id): T;
-	public i<T extends Dep>(id: Id): T {
-		return this.initiate<T>(id);
-	}
+	[id: Id]: () => Dep;
 
 	public abstract registerConstructor<T extends Host>(
-		id: Id,
 		ctor: Ctor<T>,
-	): void;
+	): () => T;
 	public rc<T extends Host>(
-		id: Id,
 		ctor: Ctor<T>,
-	): void {
-		return this.registerConstructor(id, ctor)
+	): () => T {
+		return this.registerConstructor(ctor)
 	}
 
 	public abstract registerConstructorSingleton<T extends Host>(
-		id: Id,
 		ctor: Ctor<T>,
-	): void;
+	): () => T;
 	public rcs<T extends Host>(
-		id: Id,
 		ctor: Ctor<T>,
-	): void {
-		return this.registerConstructorSingleton(id, ctor);
+	): () => T {
+		return this.registerConstructorSingleton(ctor);
 	}
 
 	public abstract registerFactory<T extends Dep>(
-		id: Id,
 		factory: Factory<T>,
-	): void;
+	): () => T;
 	public rf<T extends Dep>(
-		id: Id,
 		factory: Factory<T>,
-	): void {
-		return this.registerFactory(id, factory);
+	): () => T {
+		return this.registerFactory(factory);
 	}
 
 	public abstract registerFactorySingleton<T extends Dep>(
-		id: Id,
 		factory: Factory<T>,
-	): void;
+	): () => T;
 	public rfs<T extends Dep>(
-		id: Id,
 		factory: Factory<T>,
-	): void {
-		return this.registerFactorySingleton(id, factory);
-	}
-
-	public abstract registerAlias(
-		id: Id,
-		alias: Id,
-	): void;
-	public ra(
-		id: Id,
-		alias: Id,
-	): void {
-		return this.registerAlias(id, alias);
+	): () => T {
+		return this.registerFactorySingleton(factory);
 	}
 
 	public abstract registerValue<T extends Dep>(
-		id: Id,
 		value: T,
-	): void;
+	): () => T;
 	public rv<T extends Dep>(
-		id: Id,
 		value: T,
-	): void {
-		return this.registerValue(id, value);
+	): () => T {
+		return this.registerValue(value);
 	}
 }

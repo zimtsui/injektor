@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instantSetterInjector = exports.InstantSetterInjector = void 0;
 const exceptions_1 = require("../exceptions");
+const assert = require("assert");
 class InstantSetterInjector {
     constructor() {
         this.table = new WeakMap();
@@ -29,7 +30,9 @@ class InstantSetterInjector {
     inject(host, container) {
         const marks = this.getMarks(host);
         for (const [name, id] of marks) {
-            const value = container.initiate(id);
+            const f = container[id];
+            assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
+            const value = f();
             Reflect.set(host, name, value);
         }
         return host;

@@ -1,35 +1,43 @@
 import test from 'ava';
 import {
-	Container,
+	BaseContainer,
 	inject,
 	lazyInject,
 	instantInject,
 	CircularConstructorInjection,
 } from '../..';
 
+
+namespace TYPES {
+	export const ALike = Symbol();
+	export const BLike = Symbol();
+	export const ALikeAlias = Symbol();
+}
+
 interface ALike {
 	b?: BLike;
 }
-const ALike = 'ALike';
 interface BLike {
 	a?: ALike;
 }
-const BLike = 'BLike';
 
 
 
 test('setter injection', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rc<BLike>(B);
+	}
+
 	class A {
-		@instantInject(BLike)
+		@instantInject(TYPES.BLike)
 		public b!: BLike;
 	}
 	class B implements BLike { }
 
-	container.registerConstructor(BLike, B);
-	container.registerConstructor(ALike, A);
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALike>(ALike);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALike]();
 
 	t.assert(a1.b);
 	t.assert(a2.b);
@@ -37,17 +45,19 @@ test('setter injection', async t => {
 });
 
 test('setter injection singleton', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A {
-		@instantInject(BLike)
+		@instantInject(TYPES.BLike)
 		public b!: BLike;
 	}
 	class B implements BLike { }
 
-	container.registerConstructorSingleton(BLike, B);
-	container.registerConstructor(ALike, A);
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALike>(ALike);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALike]();
 
 	t.assert(a1.b);
 	t.assert(a2.b);
@@ -55,19 +65,21 @@ test('setter injection singleton', async t => {
 });
 
 test('constructor injection', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rc<BLike>(B);
+	}
 	class A implements ALike {
 		public constructor(
-			@inject(BLike)
+			@inject(TYPES.BLike)
 			public b: BLike,
 		) { }
 	}
 	class B implements BLike { }
 
-	container.registerConstructor(BLike, B);
-	container.registerConstructor(ALike, A);
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALike>(ALike);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALike]();
 
 	t.assert(a1 !== a2);
 	t.assert(a1.b);
@@ -76,19 +88,21 @@ test('constructor injection', async t => {
 });
 
 test('constructor injection singleton', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A implements ALike {
 		public constructor(
-			@inject(BLike)
+			@inject(TYPES.BLike)
 			public b: BLike,
 		) { }
 	}
 	class B implements BLike { }
 
-	container.registerConstructor(ALike, A);
-	container.registerConstructorSingleton(BLike, B);
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALike>(ALike);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALike]();
 
 	t.assert(a1 !== a2);
 	t.assert(a1.b);
@@ -97,40 +111,48 @@ test('constructor injection singleton', async t => {
 });
 
 test('factory injection singleton', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rfs<ALike>(
+			() => new A(
+				this[TYPES.BLike](),
+			),
+		);
+		public [TYPES.BLike] = this.rfs<BLike>(
+			() => new B(),
+		);
+	}
 	class A implements ALike {
 		public constructor(
-			@inject(BLike)
+			@inject(TYPES.BLike)
 			public b: BLike,
 		) { }
 	}
 	class B implements BLike { }
 
-	container.registerFactorySingleton(ALike, () => new A(
-		container.initiate(BLike),
-	));
-	container.registerFactorySingleton(BLike, () => new B());
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALike>(ALike);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALike]();
 
 	t.assert(a1 === a2);
 });
 
 test('circular setter injection', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rcs<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A implements ALike {
-		@instantInject(BLike)
+		@instantInject(TYPES.BLike)
 		public b!: BLike;
 	}
 	class B implements BLike {
-		@instantInject(ALike)
+		@instantInject(TYPES.ALike)
 		public a!: ALike;
 	}
 
-	container.registerConstructorSingleton(ALike, A);
-	container.registerConstructorSingleton(BLike, B);
-	const a = container.initiate<ALike>(ALike);
-	const b = container.initiate<BLike>(BLike);
+	const container = new Container();
+	const a = container[TYPES.ALike]();
+	const b = container[TYPES.BLike]();
 
 	t.assert(a.b);
 	t.assert(b.a);
@@ -140,20 +162,22 @@ test('circular setter injection', async t => {
 
 
 test('circular lazy setter injection', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rcs<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A implements ALike {
-		@lazyInject(BLike)
+		@lazyInject(TYPES.BLike)
 		public b!: BLike;
 	}
 	class B implements BLike {
-		@lazyInject(ALike)
+		@lazyInject(TYPES.ALike)
 		public a!: ALike;
 	}
 
-	container.registerConstructorSingleton(ALike, A);
-	container.registerConstructorSingleton(BLike, B);
-	const a = container.initiate<ALike>(ALike);
-	const b = container.initiate<BLike>(BLike);
+	const container = new Container();
+	const a = container[TYPES.ALike]();
+	const b = container[TYPES.BLike]();
 
 	t.assert(a.b);
 	t.assert(b.a);
@@ -162,24 +186,26 @@ test('circular lazy setter injection', async t => {
 });
 
 test('circular constructor injection', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rcs<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A implements ALike {
 		public constructor(
-			@inject(BLike)
+			@inject(TYPES.BLike)
 			public b: BLike,
 		) { }
 	}
 	class B implements BLike {
 		public constructor(
-			@inject(ALike)
+			@inject(TYPES.ALike)
 			public a: ALike,
 		) { }
 	}
 
-	container.registerConstructorSingleton(ALike, A);
-	container.registerConstructorSingleton(BLike, B);
+	const container = new Container();
 	try {
-		const a = container.initiate<ALike>(ALike);
+		const a = container[TYPES.ALike]();
 		throw new Error('');
 	} catch (err) {
 		t.assert(err instanceof CircularConstructorInjection);
@@ -187,25 +213,26 @@ test('circular constructor injection', async t => {
 });
 
 test('duplicate', async t => {
-	const container1 = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
 	class A implements ALike {
 		public constructor(
-			@inject(BLike)
+			@inject(TYPES.BLike)
 			public b: BLike,
 		) { }
 	}
 	class B implements BLike { }
 
-	container1.registerConstructor(ALike, A);
-	container1.registerConstructorSingleton(BLike, B);
+	const container1 = new Container();
+	const container2 = new Container();
 
-	const container2 = container1.duplicate();
+	const c1a1 = container1[TYPES.ALike]();
+	const c1a2 = container1[TYPES.ALike]();
 
-	const c1a1 = container1.initiate<ALike>(ALike);
-	const c1a2 = container1.initiate<ALike>(ALike);
-
-	const c2a1 = container2.initiate<ALike>(ALike);
-	const c2a2 = container2.initiate<ALike>(ALike);
+	const c2a1 = container2[TYPES.ALike]();
+	const c2a2 = container2[TYPES.ALike]();
 
 	t.assert(c2a1 !== c2a2);
 	t.assert(c1a1.b === c1a2.b);
@@ -213,15 +240,32 @@ test('duplicate', async t => {
 });
 
 test('alias', async t => {
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rcs<ALike>(A);
+		public [TYPES.ALikeAlias] = () => this[TYPES.ALike]();
+	}
 	class A implements ALike { }
 	interface ALikeAlias extends ALike { }
-	const ALikeAlias = {};
 
-	container.registerConstructorSingleton(ALike, A);
-	container.registerAlias(ALikeAlias, ALike);
-	const a1 = container.initiate<ALike>(ALike);
-	const a2 = container.initiate<ALikeAlias>(ALikeAlias);
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
+	const a2 = container[TYPES.ALikeAlias]();
 
 	t.assert(a1 === a2);
+});
+
+
+test('abstract ', async t => {
+	abstract class AbstractContainer extends BaseContainer {
+		public abstract [TYPES.ALike]: () => ALike;
+	}
+	class A implements ALike { }
+	interface ALikeAlias extends ALike { }
+
+	class Container extends AbstractContainer {
+		public [TYPES.ALike] = this.rc<ALike>(A);
+	}
+
+	const container = new Container();
+	const a1 = container[TYPES.ALike]();
 });

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Container = void 0;
+exports.BaseContainer = void 0;
 const container_like_1 = require("./container-like");
 const factory_inside_multition_producer_1 = require("../producers/factory-inside-multition-producer");
 const constructor_inside_multition_producer_1 = require("../producers/constructor-inside-multition-producer");
 const factory_inside_singleton_producer_1 = require("../producers/factory-inside-singleton-producer");
 const constructor_inside_singleton_producer_1 = require("../producers/constructor-inside-singleton-producer");
 const value_producer_1 = require("../producers/value-producer");
-class Container extends container_like_1.ContainerLike {
+class BaseContainer extends container_like_1.ContainerLike {
     registerConstructor(ctor) {
         const producer = new constructor_inside_multition_producer_1.ConstructorInsideMultitionProducer(ctor, this);
         return () => producer.getInstance();
@@ -29,5 +29,5 @@ class Container extends container_like_1.ContainerLike {
         return () => producer.getInstance();
     }
 }
-exports.Container = Container;
-//# sourceMappingURL=container.js.map
+exports.BaseContainer = BaseContainer;
+//# sourceMappingURL=base-container.js.map

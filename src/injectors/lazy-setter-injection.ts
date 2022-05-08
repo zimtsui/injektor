@@ -1,5 +1,5 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { NotInjected } from '../exceptions';
+import { NotInjected, Unregistered } from '../exceptions';
 import {
 	Id,
 	Dep,
@@ -11,6 +11,7 @@ import {
 } from './injector-like';
 import assert = require('assert');
 import { ContainerLike } from '../container/container-like';
+
 
 
 export class LazySetterInjector implements SetterInjectorLike {
@@ -33,7 +34,12 @@ export class LazySetterInjector implements SetterInjectorLike {
 						typeof container !== 'undefined',
 						new NotInjected(name),
 					);
-					const value = container.initiate(id);
+					const f = <(() => Dep) | undefined>container[id];
+					assert(
+						typeof f !== 'undefined',
+						new Unregistered(),
+					);
+					const value = f();
 					Reflect.defineProperty(
 						this,
 						name,

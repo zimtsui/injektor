@@ -14,7 +14,9 @@ class LazySetterInjector {
                 get() {
                     const container = initiators.get(this);
                     assert(typeof container !== 'undefined', new exceptions_1.NotInjected(name));
-                    const value = container.initiate(id);
+                    const f = container[id];
+                    assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
+                    const value = f();
                     Reflect.defineProperty(this, name, {
                         value,
                         enumerable: true,

@@ -2,11 +2,13 @@ import {
 	Id,
 	Host,
 	Ctor,
+	Dep,
 } from '../interfaces';
 import { PropName } from './injector-like';
 import { ContainerLike } from '../container/container-like';
 import assert = require('assert');
 import { InjectorLike } from './injector-like';
+import { Unregistered } from '../exceptions';
 
 
 export type Marks = (Id | undefined)[];
@@ -31,7 +33,12 @@ export class ConstructorInjector implements InjectorLike {
 		const marks = this.getMarks(ctor);
 		const deps = marks.map(id => {
 			assert(typeof id !== 'undefined');
-			return container.initiate(id);
+			const f = <(() => Dep) | undefined>container[id];
+			assert(
+				typeof f !== 'undefined',
+				new Unregistered(),
+			);
+			return f();
 		});
 		return new ctor(...deps);
 	}
