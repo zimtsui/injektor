@@ -26,7 +26,10 @@ InversifyJS cannot inject circular dependencies instantly, but can only do lazil
 ### Constructor injection
 
 ```ts
-import { BaseContainer } from '@zimtsui/injektor';
+import {
+	BaseContainer,
+	inject,
+} from '@zimtsui/injektor';
 
 namespace TYPES {
 	export const ALike = Symbol();
@@ -61,7 +64,11 @@ t.assert(a1.b !== a2.b);
 ### Instant setter injection
 
 ```diff
-	import { BaseContainer } from '@zimtsui/injektor';
+	import {
+		BaseContainer,
+-		inject,
++		instantInject,
+	} from '@zimtsui/injektor';
 
 	namespace TYPES {
 		export const ALike = Symbol();
@@ -98,7 +105,10 @@ t.assert(a1.b !== a2.b);
 ### Singleton
 
 ```diff
-	import { BaseContainer } from '@zimtsui/injektor';
+	import {
+		BaseContainer,
+		instantInject,
+	} from '@zimtsui/injektor';
 
 	namespace TYPES {
 		export const ALike = Symbol();
@@ -134,7 +144,10 @@ t.assert(a1.b !== a2.b);
 ### Circular Dependency
 
 ```diff
-	import { BaseContainer } from '@zimtsui/injektor';
+	import {
+		BaseContainer,
+		instantInject,
+	} from '@zimtsui/injektor';
 
 	namespace TYPES {
 		export const ALike = Symbol();
@@ -144,9 +157,10 @@ t.assert(a1.b !== a2.b);
 	interface ALike {
 		b: BLike;
 	}
-	interface BLike {
-		a: ALike;
-	}
+-	interface BLike { }
++	interface BLike {
++		a: ALike;
++	}
 
 	class Container extends BaseContainer {
 		public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
@@ -157,10 +171,11 @@ t.assert(a1.b !== a2.b);
 		@instantInject(TYPES.BLike)
 		public b!: BLike;
 	}
-	class B implements BLike {
-		@instantInject(TYPES.ALike)
-		public a!: ALike;
-	}
+-	class B implements BLike { }
++	class B implements BLike {
++		@instantInject(TYPES.ALike)
++		public a!: ALike;
++	}
 
 	const container = new Container();
 	const a1 = container[TYPES.ALike]();
