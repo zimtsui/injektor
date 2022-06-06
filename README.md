@@ -1,5 +1,7 @@
 # Injektor
 
+[![Npm package version](https://badgen.net/npm/v/@zimtsui/injektor)](https://www.npmjs.com/package/@zimtsui/injektor)
+
 Injektor is a dependency injection framework for TypeScript.
 
 - No implicit globals.
