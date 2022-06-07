@@ -14,4 +14,5 @@ __exportStar(require("./interfaces"), exports);
 __exportStar(require("./container/base-container"), exports);
 __exportStar(require("./exceptions"), exports);
 __exportStar(require("./decorators"), exports);
+__exportStar(require("./container/container-like"), exports);
 //# sourceMappingURL=index.js.map
