@@ -30,6 +30,7 @@ InversifyJS cannot inject circular dependencies instantly, but can only do lazil
 ```ts
 import {
 	BaseContainer,
+	ContainerLike,
 	inject,
 } from '@zimtsui/injektor';
 
@@ -43,11 +44,6 @@ interface ALike {
 }
 interface BLike { }
 
-class Container extends BaseContainer {
-	public [TYPES.ALike] = this.registerConstructor<ALike>(A);
-	public [TYPES.BLike] = this.registerConstructor<BLike>(B);
-}
-
 class A implements ALike {
 	public constructor(
 		@inject(TYPES.BLike)
@@ -56,7 +52,12 @@ class A implements ALike {
 }
 class B implements BLike { }
 
-const container = new Container();
+class Container extends BaseContainer {
+	public [TYPES.ALike] = this.registerConstructor<ALike>(A);
+	public [TYPES.BLike] = this.registerConstructor<BLike>(B);
+}
+
+const container: ContainerLike = new Container();
 const a1 = container[TYPES.ALike]();
 const a2 = container[TYPES.ALike]();
 
@@ -68,6 +69,7 @@ t.assert(a1.b !== a2.b);
 ```diff
 	import {
 		BaseContainer,
+		ContainerLike,
 -		inject,
 +		instantInject,
 	} from '@zimtsui/injektor';
@@ -82,11 +84,6 @@ t.assert(a1.b !== a2.b);
 	}
 	interface BLike { }
 
-	class Container extends BaseContainer {
-		public [TYPES.ALike] = this.registerConstructor<ALike>(A);
-		public [TYPES.BLike] = this.registerConstructor<BLike>(B);
-	}
-
 	class A implements ALike {
 -		public constructor(
 -			@inject(TYPES.BLike)
@@ -97,7 +94,12 @@ t.assert(a1.b !== a2.b);
 	}
 	class B implements BLike { }
 
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.registerConstructor<ALike>(A);
+		public [TYPES.BLike] = this.registerConstructor<BLike>(B);
+	}
+
+	const container: ContainerLike = new Container();
 	const a1 = container[TYPES.ALike]();
 	const a2 = container[TYPES.ALike]();
 
@@ -109,6 +111,7 @@ t.assert(a1.b !== a2.b);
 ```diff
 	import {
 		BaseContainer,
+		ContainerLike,
 		instantInject,
 	} from '@zimtsui/injektor';
 
@@ -122,6 +125,12 @@ t.assert(a1.b !== a2.b);
 	}
 	interface BLike { }
 
+	class A implements ALike {
+		@instantInject(TYPES.BLike)
+		public b!: BLike;
+	}
+	class B implements BLike { }
+
 	class Container extends BaseContainer {
 -		public [TYPES.ALike] = this.registerConstructor<ALike>(A);
 -		public [TYPES.BLike] = this.registerConstructor<BLike>(B);
@@ -129,13 +138,7 @@ t.assert(a1.b !== a2.b);
 +		public [TYPES.BLike] = this.registerConstructorSingleton<BLike>(B);
 	}
 
-	class A implements ALike {
-		@instantInject(TYPES.BLike)
-		public b!: BLike;
-	}
-	class B implements BLike { }
-
-	const container = new Container();
+	const container: ContainerLike = new Container();
 	const a1 = container[TYPES.ALike]();
 	const a2 = container[TYPES.ALike]();
 
@@ -148,6 +151,7 @@ t.assert(a1.b !== a2.b);
 ```diff
 	import {
 		BaseContainer,
+		ContainerLike,
 		instantInject,
 	} from '@zimtsui/injektor';
 
@@ -164,11 +168,6 @@ t.assert(a1.b !== a2.b);
 +		a: ALike;
 +	}
 
-	class Container extends BaseContainer {
-		public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
-		public [TYPES.BLike] = this.registerConstructorSingleton<BLike>(B);
-	}
-
 	class A implements ALike {
 		@instantInject(TYPES.BLike)
 		public b!: BLike;
@@ -179,13 +178,63 @@ t.assert(a1.b !== a2.b);
 +		public a!: ALike;
 +	}
 
-	const container = new Container();
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
+		public [TYPES.BLike] = this.registerConstructorSingleton<BLike>(B);
+	}
+
+	const container: ContainerLike = new Container();
 	const a1 = container[TYPES.ALike]();
 	const a2 = container[TYPES.ALike]();
 
 -	t.assert(a1.b === a2.b);
 +	t.assert(a.b === b);
 +	t.assert(b.a === a);
+```
+
+#### Integrity during circular injection
+
+During circular injection, a singleton acquired from the container may haven't been fully injected yet.
+
+```ts
+import {
+	BaseContainer,
+	ContainerLike,
+	instantInject,
+} from '@zimtsui/injektor';
+
+namespace TYPES {
+	export const ALike = Symbol();
+	export const BLike = Symbol();
+}
+
+interface ALike {
+	b: BLike;
+}
+interface BLike {
+	a: ALike;
+}
+
+class A implements ALike {
+	@instantInject(TYPES.BLike)
+	public b!: BLike;
+}
+class B implements BLike {
+	@instantInject(TYPES.ALike)
+	public a!: ALike;
+}
+
+class Container extends BaseContainer {
+	public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
+	public [TYPES.BLike] = this.registerFactorySingleton<BLike>(() => {
+		const a = this[TYPES.ALike]();
+		assert(a.b); // throws an exception that the property 'b' hasn't been injected into 'a'.
+		return new B();
+	});
+}
+
+const container: ContainerLike = new Container();
+const a = container[TYPES.ALike]();
 ```
 
 ### Factory Dependency
@@ -225,8 +274,8 @@ Just new another one.
 
 ```ts
 class Container extends BaseContainer { }
-const c1 = new Container();
-const c2 = new Container();
+const c1: ContainerLike = new Container();
+const c2: ContainerLike = new Container();
 ```
 
 ### extending a container
