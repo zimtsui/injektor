@@ -74,7 +74,7 @@ export class InstantSetterInjector implements SetterInjectorLike {
 	private getMarks(host: Host): Marks {
 		return this.getMarksOnProto(
 			host,
-			host.constructor.prototype,
+			Reflect.getPrototypeOf(host),
 		);
 	}
 

@@ -38,7 +38,7 @@ class InstantSetterInjector {
         return host;
     }
     getMarks(host) {
-        return this.getMarksOnProto(host, host.constructor.prototype);
+        return this.getMarksOnProto(host, Reflect.getPrototypeOf(host));
     }
     getMarksOnProto(host, proto) {
         if (proto === null)
