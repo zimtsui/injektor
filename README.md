@@ -192,51 +192,6 @@ t.assert(a1.b !== a2.b);
 +	t.assert(b.a === a);
 ```
 
-#### Integrity during circular injection
-
-During circular injection, a singleton acquired from the container may haven't been fully injected yet.
-
-```ts
-import {
-	BaseContainer,
-	ContainerLike,
-	instantInject,
-} from '@zimtsui/injektor';
-
-namespace TYPES {
-	export const ALike = Symbol();
-	export const BLike = Symbol();
-}
-
-interface ALike {
-	b: BLike;
-}
-interface BLike {
-	a: ALike;
-}
-
-class A implements ALike {
-	@instantInject(TYPES.BLike)
-	public b!: BLike;
-}
-class B implements BLike {
-	@instantInject(TYPES.ALike)
-	public a!: ALike;
-}
-
-class Container extends BaseContainer {
-	public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
-	public [TYPES.BLike] = this.registerFactorySingleton<BLike>(() => {
-		const a = this[TYPES.ALike]();
-		assert(a.b); // throws an exception that the property 'b' hasn't been injected into 'a'.
-		return new B();
-	});
-}
-
-const container: ContainerLike = new Container();
-const a = container[TYPES.ALike]();
-```
-
 ### Factory Dependency
 
 ```ts
@@ -295,4 +250,49 @@ The software architect can defer the determination of concrete dependencies unti
 abstract class AbstractContainer extends BaseContainer {
 	public abstract [TYPES.ALike]: () => ALike;
 }
+```
+
+### Integrity during circular injection
+
+During circular injection, a singleton acquired from the container may haven't been fully injected yet.
+
+```ts
+import {
+	BaseContainer,
+	ContainerLike,
+	instantInject,
+} from '@zimtsui/injektor';
+
+namespace TYPES {
+	export const ALike = Symbol();
+	export const BLike = Symbol();
+}
+
+interface ALike {
+	b: BLike;
+}
+interface BLike {
+	a: ALike;
+}
+
+class A implements ALike {
+	@instantInject(TYPES.BLike)
+	public b!: BLike;
+}
+class B implements BLike {
+	@instantInject(TYPES.ALike)
+	public a!: ALike;
+}
+
+class Container extends BaseContainer {
+	public [TYPES.ALike] = this.registerConstructorSingleton<ALike>(A);
+	public [TYPES.BLike] = this.registerFactorySingleton<BLike>(() => {
+		const a = this[TYPES.ALike]();
+		assert(a.b); // throws an exception that the property 'b' hasn't been injected into 'a'.
+		return new B();
+	});
+}
+
+const container: ContainerLike = new Container();
+const a = container[TYPES.ALike]();
 ```
