@@ -12,12 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ava_1 = require("ava");
 const __1 = require("../..");
 const assert = require("assert");
-var TYPES;
-(function (TYPES) {
-    TYPES.ALike = Symbol();
-    TYPES.BLike = Symbol();
-    TYPES.ALikeAlias = Symbol();
-})(TYPES || (TYPES = {}));
+class TYPES {
+}
+TYPES.ALike = Symbol();
+TYPES.BLike = Symbol();
+TYPES.ALikeAlias = Symbol();
 (0, ava_1.default)('setter injection', async (t) => {
     var _a, _b;
     class Container extends __1.BaseContainer {

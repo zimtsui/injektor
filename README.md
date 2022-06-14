@@ -34,9 +34,9 @@ import {
 	inject,
 } from '@zimtsui/injektor';
 
-namespace TYPES {
-	export const ALike = Symbol();
-	export const BLike = Symbol();
+class TYPES {
+	public static readonly ALike = Symbol();
+	public static readonly BLike = Symbol();
 }
 
 interface ALike {
@@ -74,9 +74,9 @@ t.assert(a1.b !== a2.b);
 +		instantInject,
 	} from '@zimtsui/injektor';
 
-	namespace TYPES {
-		export const ALike = Symbol();
-		export const BLike = Symbol();
+	class TYPES {
+		public static readonly ALike = Symbol();
+		public static readonly BLike = Symbol();
 	}
 
 	interface ALike {
@@ -115,9 +115,9 @@ t.assert(a1.b !== a2.b);
 		instantInject,
 	} from '@zimtsui/injektor';
 
-	namespace TYPES {
-		export const ALike = Symbol();
-		export const BLike = Symbol();
+	class TYPES {
+		public static readonly ALike = Symbol();
+		public static readonly BLike = Symbol();
 	}
 
 	interface ALike {
@@ -155,9 +155,9 @@ t.assert(a1.b !== a2.b);
 		instantInject,
 	} from '@zimtsui/injektor';
 
-	namespace TYPES {
-		export const ALike = Symbol();
-		export const BLike = Symbol();
+	class TYPES {
+		public static readonly ALike = Symbol();
+		public static readonly BLike = Symbol();
 	}
 
 	interface ALike {
@@ -213,9 +213,9 @@ class Container extends BaseContainer {
 ### Alias
 
 ```ts
-namespace TYPES {
-	export const ALike = Symbol();
-	export const ALikeAlias = Symbol();
+class TYPES {
+	public static readonly ALike = Symbol();
+	public static readonly ALikeAlias = Symbol();
 }
 
 class Container extends BaseContainer {
@@ -263,9 +263,9 @@ import {
 	instantInject,
 } from '@zimtsui/injektor';
 
-namespace TYPES {
-	export const ALike = Symbol();
-	export const BLike = Symbol();
+class TYPES {
+	public static readonly ALike = Symbol();
+	public static readonly BLike = Symbol();
 }
 
 interface ALike {

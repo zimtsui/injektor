@@ -10,10 +10,10 @@ import {
 import assert = require('assert');
 
 
-namespace TYPES {
-	export const ALike = Symbol();
-	export const BLike = Symbol();
-	export const ALikeAlias = Symbol();
+class TYPES {
+	public static readonly ALike = Symbol();
+	public static readonly BLike = Symbol();
+	public static readonly ALikeAlias = Symbol();
 }
 
 interface ALike {
