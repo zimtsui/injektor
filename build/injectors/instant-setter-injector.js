@@ -14,7 +14,7 @@ class InstantSetterInjector {
                 configurable: true,
                 enumerable: false,
                 get() {
-                    throw new exceptions_1.NotSetterInjected(name);
+                    throw new exceptions_1.NotSetterInjected();
                 },
                 set(value) {
                     Reflect.defineProperty(this, name, {
@@ -31,7 +31,7 @@ class InstantSetterInjector {
         const marks = this.getMarks(host);
         for (const [name, id] of marks) {
             const f = container[id];
-            assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
+            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered());
             const value = f();
             Reflect.set(host, name, value);
         }

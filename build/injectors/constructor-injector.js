@@ -14,13 +14,14 @@ class ConstructorInjector {
     }
     inject(ctor, container) {
         const marks = this.getMarks(ctor);
-        assert(marks.length === ctor.length, new exceptions_1.NotContructorInjected(ctor.length));
-        const deps = marks.map(id => {
-            assert(typeof id !== 'undefined', new exceptions_1.Unregistered());
+        const deps = [];
+        for (let index = 0; index < ctor.length; index++) {
+            const id = marks[index];
+            assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected());
             const f = container[id];
-            assert(typeof f !== 'undefined', new exceptions_1.Unregistered());
-            return f();
-        });
+            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered());
+            deps.push(f());
+        }
         return new ctor(...deps);
     }
     getMarks(ctor) {

@@ -1,5 +1,5 @@
 import { SetterInjectorLike } from './setter-injection-like';
-import { NotSetterInjected, Unregistered } from '../exceptions';
+import { NotSetterInjected, NotRegistered } from '../exceptions';
 import {
 	Id,
 	Dep,
@@ -32,12 +32,12 @@ export class LazySetterInjector implements SetterInjectorLike {
 					const container = initiators.get(this);
 					assert(
 						typeof container !== 'undefined',
-						new NotSetterInjected(name),
+						new NotSetterInjected(),
 					);
 					const f = <(() => Dep) | undefined>container[id];
 					assert(
 						typeof f !== 'undefined',
-						new Unregistered(),
+						new NotRegistered(),
 					);
 					const value = f();
 					Reflect.defineProperty(
