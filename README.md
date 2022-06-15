@@ -7,7 +7,7 @@ Injektor is a dependency injection framework for TypeScript.
 - No implicit globals.
 - Instant Setter injection with support for circular dependency.
 - Independent of experimental [metadata reflection](https://github.com/rbuckton/reflect-metadata).
-- Compile-time check whether there are any declared type symbols forgotten to be registered with a constructor.
+- Compile-time registration.
 
 ## Comparison
 
