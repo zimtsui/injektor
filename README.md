@@ -296,3 +296,34 @@ class Container extends BaseContainer {
 const container: ContainerLike = new Container();
 const a = container[TYPES.ALike]();
 ```
+
+### Constructor injection for inherited construtors
+
+`injextends()` decorator means injecting this class the same as its parent.
+
+```diff
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(AChild);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
+	class A implements ALike {
+		public constructor(
+			@inject(TYPES.BLike)
+			public b: BLike,
+		) { }
+	}
+-	class AChild extends A {
+-		public constructor(
+-			@inject(TYPES.BLike)
+-			b: BLike,
+-		) { super(b); }
+-	}
++	@injextends()
++	class AChild extends A { }
+	class B implements BLike { }
+
+	const container = new Container();
+	const a = container[TYPES.ALike]();
+
+	t.assert(a.b);
+```
