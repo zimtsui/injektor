@@ -2,10 +2,11 @@ import test from 'ava';
 import {
 	BaseContainer,
 	inject,
+	injextends,
 	lazyInject,
 	instantInject,
 	CircularConstructorInjection,
-	NotContructorInjected
+	NotContructorInjected,
 } from '../..';
 import assert = require('assert');
 
@@ -289,4 +290,25 @@ test('args length', async t => {
 		() => container[TYPES.ALike](),
 		NotContructorInjected,
 	);
+});
+
+test('constructor injection extending', async t => {
+	class Container extends BaseContainer {
+		public [TYPES.ALike] = this.rc<ALike>(AChild);
+		public [TYPES.BLike] = this.rcs<BLike>(B);
+	}
+	class A implements ALike {
+		public constructor(
+			@inject(TYPES.BLike)
+			public b: BLike,
+		) { }
+	}
+	@injextends()
+	class AChild extends A { }
+	class B implements BLike { }
+
+	const container = new Container();
+	const a = container[TYPES.ALike]();
+
+	t.assert(a.b);
 });

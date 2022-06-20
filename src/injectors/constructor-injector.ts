@@ -15,6 +15,7 @@ export type Marks = (Id | undefined)[];
 
 export class ConstructorInjector implements InjectorLike {
 	private table = new WeakMap<Ctor<Host>, Marks>();
+	private extending = new WeakSet<Ctor<Host>>();
 
 	public decorator = (id: Id) => (
 		ctor: Ctor<Host>,
@@ -30,6 +31,17 @@ export class ConstructorInjector implements InjectorLike {
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	): T {
+		if (this.extending.has(ctor)) {
+			const parent = <Ctor<T> | null>Reflect.getPrototypeOf(ctor);
+			assert(
+				parent !== null,
+				new NotContructorInjected(),
+			);
+			return this.inject(
+				parent,
+				container,
+			);
+		}
 		const marks = this.getMarks(ctor);
 		const deps: unknown[] = [];
 		for (let index = 0; index < ctor.length; index++) {
@@ -50,6 +62,12 @@ export class ConstructorInjector implements InjectorLike {
 
 	private getMarks(ctor: Ctor<Host>): Marks {
 		return this.table.get(ctor) || [];
+	}
+
+	public injextends = () => (
+		ctor: Ctor<Host>,
+	) => {
+		this.extending.add(ctor);
 	}
 }
 

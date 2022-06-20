@@ -6,3 +6,4 @@ export const lazyInject = lazySetterInjector.decorator;
 
 import { constructorInjector } from './injectors/constructor-injector';
 export const inject = constructorInjector.decorator;
+export const injextends = constructorInjector.injextends;

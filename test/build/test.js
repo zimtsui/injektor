@@ -320,4 +320,33 @@ TYPES.ALikeAlias = Symbol();
     const container = new Container();
     assert.throws(() => container[TYPES.ALike](), __1.NotContructorInjected);
 });
+(0, ava_1.default)('constructor injection extending', async (t) => {
+    var _a, _b;
+    class Container extends __1.BaseContainer {
+        constructor() {
+            super(...arguments);
+            this[_a] = this.rc(AChild);
+            this[_b] = this.rcs(B);
+        }
+    }
+    _a = TYPES.ALike, _b = TYPES.BLike;
+    let A = class A {
+        constructor(b) {
+            this.b = b;
+        }
+    };
+    A = __decorate([
+        __param(0, (0, __1.inject)(TYPES.BLike))
+    ], A);
+    let AChild = class AChild extends A {
+    };
+    AChild = __decorate([
+        (0, __1.injextends)()
+    ], AChild);
+    class B {
+    }
+    const container = new Container();
+    const a = container[TYPES.ALike]();
+    t.assert(a.b);
+});
 //# sourceMappingURL=test.js.map
