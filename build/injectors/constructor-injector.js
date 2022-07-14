@@ -17,23 +17,30 @@ class ConstructorInjector {
         };
     }
     inject(ctor, container) {
-        const marks = this.getMarks(ctor);
+        const realCtor = this.getRealCtor(ctor);
+        const arity = realCtor !== null ? realCtor.length : 0;
+        const marks = this.getMarks(realCtor);
         const deps = [];
-        for (let index = 0; index < ctor.length; index++) {
+        for (let index = 0; index < arity; index++) {
             const id = marks[index];
-            assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected());
+            assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected(id?.description));
             const f = container[id];
             assert(typeof f !== 'undefined', new exceptions_1.NotRegistered(id.description));
             deps.push(f());
         }
         return new ctor(...deps);
     }
-    getMarks(ctor) {
-        while (ctor !== null && this.extending.has(ctor))
-            ctor = Reflect.getPrototypeOf(ctor);
-        if (ctor === null)
+    getMarks(realCtor) {
+        if (realCtor === null)
             return [];
-        return this.table.get(ctor) || [];
+        return this.table.get(realCtor) || [];
+    }
+    getRealCtor(ctor) {
+        if (ctor === null)
+            return ctor;
+        if (!this.extending.has(ctor))
+            return ctor;
+        return this.getRealCtor(Reflect.getPrototypeOf(ctor));
     }
 }
 exports.ConstructorInjector = ConstructorInjector;

@@ -9,6 +9,7 @@ export declare class ConstructorInjector implements InjectorLike {
     decorator: (id: Id) => (ctor: Ctor<Host>, name: PropName, index: number) => void;
     inject<T extends Host>(ctor: Ctor<T>, container: ContainerLike): T;
     private getMarks;
+    private getRealCtor;
     injextends: () => (ctor: Ctor<Host>) => void;
 }
 export declare const constructorInjector: ConstructorInjector;

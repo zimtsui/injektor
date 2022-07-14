@@ -31,13 +31,15 @@ export class ConstructorInjector implements InjectorLike {
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	): T {
-		const marks = this.getMarks(ctor);
+		const realCtor = this.getRealCtor(ctor);
+		const arity = realCtor !== null ? realCtor.length : 0;
+		const marks = this.getMarks(realCtor);
 		const deps: unknown[] = [];
-		for (let index = 0; index < ctor.length; index++) {
+		for (let index = 0; index < arity; index++) {
 			const id = marks[index];
 			assert(
 				typeof id !== 'undefined',
-				new NotContructorInjected(),
+				new NotContructorInjected(id?.description),
 			);
 			const f = <(() => Dep) | undefined>container[id];
 			assert(
@@ -49,11 +51,15 @@ export class ConstructorInjector implements InjectorLike {
 		return new ctor(...deps);
 	}
 
-	private getMarks(ctor: Ctor<Host> | null): Marks {
-		while (ctor !== null && this.extending.has(ctor))
-			ctor = <Ctor<Host> | null>Reflect.getPrototypeOf(ctor);
-		if (ctor === null) return [];
-		return this.table.get(ctor) || [];
+	private getMarks(realCtor: Ctor<Host> | null): Marks {
+		if (realCtor === null) return [];
+		return this.table.get(realCtor) || [];
+	}
+
+	private getRealCtor(ctor: Ctor<Host> | null): Ctor<Host> | null {
+		if (ctor === null) return ctor;
+		if (!this.extending.has(ctor)) return ctor;
+		return this.getRealCtor(<Ctor<Host> | null>Reflect.getPrototypeOf(ctor));
 	}
 
 	public injextends = () => (
