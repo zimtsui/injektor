@@ -23,7 +23,7 @@ class ConstructorInjector {
             const id = marks[index];
             assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected());
             const f = container[id];
-            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered());
+            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered(id.description));
             deps.push(f());
         }
         return new ctor(...deps);

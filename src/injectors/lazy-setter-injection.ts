@@ -32,12 +32,12 @@ export class LazySetterInjector implements SetterInjectorLike {
 					const container = initiators.get(this);
 					assert(
 						typeof container !== 'undefined',
-						new NotSetterInjected(),
+						new NotSetterInjected(id.description),
 					);
 					const f = <(() => Dep) | undefined>container[id];
 					assert(
 						typeof f !== 'undefined',
-						new NotRegistered(),
+						new NotRegistered(id.description),
 					);
 					const value = f();
 					Reflect.defineProperty(

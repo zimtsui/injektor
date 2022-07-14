@@ -32,7 +32,7 @@ export class InstantSetterInjector implements SetterInjectorLike {
 				configurable: true,
 				enumerable: false,
 				get(): never {
-					throw new NotSetterInjected();
+					throw new NotSetterInjected(id.description);
 				},
 				set(value: Dep): void {
 					Reflect.defineProperty(
@@ -59,7 +59,7 @@ export class InstantSetterInjector implements SetterInjectorLike {
 			const f = <(() => Dep) | undefined>container[id];
 			assert(
 				typeof f !== 'undefined',
-				new NotRegistered(),
+				new NotRegistered(id.description),
 			);
 			const value = f();
 			Reflect.set(

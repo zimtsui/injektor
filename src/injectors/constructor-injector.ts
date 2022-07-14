@@ -42,7 +42,7 @@ export class ConstructorInjector implements InjectorLike {
 			const f = <(() => Dep) | undefined>container[id];
 			assert(
 				typeof f !== 'undefined',
-				new NotRegistered(),
+				new NotRegistered(id.description),
 			);
 			deps.push(f());
 		}
