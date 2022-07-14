@@ -23,9 +23,9 @@ class ConstructorInjector {
         const deps = [];
         for (let index = 0; index < arity; index++) {
             const id = marks[index];
-            assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected(id?.description));
+            assert(typeof id !== 'undefined', new exceptions_1.NotContructorInjected(ctor.name, `${index}`));
             const f = container[id];
-            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered(id.description));
+            assert(typeof f !== 'undefined', new exceptions_1.NotRegistered(`${id.description}`));
             deps.push(f());
         }
         return new ctor(...deps);

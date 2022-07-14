@@ -39,12 +39,15 @@ export class ConstructorInjector implements InjectorLike {
 			const id = marks[index];
 			assert(
 				typeof id !== 'undefined',
-				new NotContructorInjected(id?.description),
+				new NotContructorInjected(
+					ctor.name,
+					`${index}`,
+				),
 			);
 			const f = <(() => Dep) | undefined>container[id];
 			assert(
 				typeof f !== 'undefined',
-				new NotRegistered(id.description),
+				new NotRegistered(`${id.description}`),
 			);
 			deps.push(f());
 		}
