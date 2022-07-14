@@ -17,11 +17,6 @@ class ConstructorInjector {
         };
     }
     inject(ctor, container) {
-        if (this.extending.has(ctor)) {
-            const parent = Reflect.getPrototypeOf(ctor);
-            assert(parent !== null, new exceptions_1.NotContructorInjected());
-            return this.inject(parent, container);
-        }
         const marks = this.getMarks(ctor);
         const deps = [];
         for (let index = 0; index < ctor.length; index++) {
@@ -34,6 +29,10 @@ class ConstructorInjector {
         return new ctor(...deps);
     }
     getMarks(ctor) {
+        while (ctor !== null && this.extending.has(ctor))
+            ctor = Reflect.getPrototypeOf(ctor);
+        if (ctor === null)
+            return [];
         return this.table.get(ctor) || [];
     }
 }

@@ -31,17 +31,6 @@ export class ConstructorInjector implements InjectorLike {
 		ctor: Ctor<T>,
 		container: ContainerLike,
 	): T {
-		if (this.extending.has(ctor)) {
-			const parent = <Ctor<T> | null>Reflect.getPrototypeOf(ctor);
-			assert(
-				parent !== null,
-				new NotContructorInjected(),
-			);
-			return this.inject(
-				parent,
-				container,
-			);
-		}
 		const marks = this.getMarks(ctor);
 		const deps: unknown[] = [];
 		for (let index = 0; index < ctor.length; index++) {
@@ -60,7 +49,10 @@ export class ConstructorInjector implements InjectorLike {
 		return new ctor(...deps);
 	}
 
-	private getMarks(ctor: Ctor<Host>): Marks {
+	private getMarks(ctor: Ctor<Host> | null): Marks {
+		while (ctor !== null && this.extending.has(ctor))
+			ctor = <Ctor<Host> | null>Reflect.getPrototypeOf(ctor);
+		if (ctor === null) return [];
 		return this.table.get(ctor) || [];
 	}
 
