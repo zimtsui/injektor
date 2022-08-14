@@ -8,6 +8,7 @@ import { ContainerLike } from '../container/container-like';
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{
 	private singleton?: T;
+	private produced = false;
 	private locked = false;
 
 	public constructor(
@@ -17,13 +18,14 @@ export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T
 	public abstract duplicate(container: ContainerLike): SingletonProducer<T>;
 
 	public getInstance(): T {
-		if (typeof this.singleton === 'undefined') {
+		if (!this.produced) {
 			assert(!this.locked, new CircularConstructorInjection());
 			this.locked = true;
+			this.produced = true;
 			this.singleton = this.producer.getInstanceWithoutSetterInjection();
 			this.locked = false;
 			this.producer.setterInject(this.singleton);
 		}
-		return this.singleton;
+		return this.singleton!;
 	}
 }
