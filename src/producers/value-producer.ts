@@ -10,8 +10,4 @@ export class ValueProducer<T extends Dep> implements ProducerLike<T>{
 	public getInstance(): T {
 		return this.value;
 	}
-
-	public duplicate() {
-		return new ValueProducer(this.value);
-	}
 }

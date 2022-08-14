@@ -8,7 +8,6 @@ import { ConstructorInsideMultitionProducer } from './constructor-inside-multiti
 
 
 export class ConstructorInsideSingletonProducer<T extends Host> extends SingletonProducer<T> {
-	private ctor: Ctor<T>;
 	public constructor(
 		ctor: Ctor<T>,
 		container: ContainerLike,
@@ -18,13 +17,5 @@ export class ConstructorInsideSingletonProducer<T extends Host> extends Singleto
 			container,
 		);
 		super(producer);
-		this.ctor = ctor;
-	}
-
-	public duplicate(container: ContainerLike) {
-		return new ConstructorInsideSingletonProducer(
-			this.ctor,
-			container,
-		);
 	}
 }

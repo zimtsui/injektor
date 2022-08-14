@@ -15,13 +15,6 @@ export class FactoryInsideMultitionProducer<T extends Dep> implements MultitionP
 		private container: ContainerLike,
 	) { }
 
-	public duplicate(container: ContainerLike) {
-		return new FactoryInsideMultitionProducer(
-			this.factory,
-			container,
-		);
-	}
-
 	public getInstance(): T {
 		const instance = this.getInstanceWithoutSetterInjection();
 		return this.setterInject(instance);

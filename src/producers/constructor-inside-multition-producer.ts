@@ -21,13 +21,6 @@ export class ConstructorInsideMultitionProducer<T extends Host> implements Multi
 		);
 	}
 
-	public duplicate(container: ContainerLike) {
-		return new ConstructorInsideMultitionProducer(
-			this.ctor,
-			container,
-		);
-	}
-
 	public getInstance(): T {
 		return this.factoryProducer.getInstance();
 	}
