@@ -11,7 +11,7 @@ import { ContainerLike } from '../container/container-like';
 
 
 
-export class LazySetterInjector {
+class LazySetterInjector {
 	private initiators = new WeakMap<Host, ContainerLike>();
 
 	public decorator = (id: Id) => (

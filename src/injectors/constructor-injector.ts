@@ -12,7 +12,7 @@ import { NotRegistered, NotContructorInjected } from '../exceptions';
 
 type ParamMap = Map<number, Id>;
 
-export class ConstructorInjector {
+class ConstructorInjector {
 	private table = new WeakMap<Ctor<Host>, ParamMap>();
 	private extending = new WeakSet<Ctor<Host>>();
 

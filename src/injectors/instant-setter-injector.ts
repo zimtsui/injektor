@@ -11,7 +11,7 @@ import assert = require('assert');
 
 
 
-export class InstantSetterInjector {
+class InstantSetterInjector {
 	private table = new WeakMap<Proto, Marks>();
 
 	public decorator = (id: Id) => (
