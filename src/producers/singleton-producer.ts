@@ -6,8 +6,7 @@ import assert = require('assert');
 
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{
-	private singleton?: T;
-	private produced = false;
+	private singleton = new Nullable<T>;
 	private locked = false;
 
 	public constructor(
@@ -15,14 +14,33 @@ export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T
 	) { }
 
 	public getInstance(): T {
-		if (!this.produced) {
-			assert(!this.locked, new CircularConstructorInjection());
-			this.locked = true;
-			this.singleton = this.producer.getInstanceWithoutSetterInjection();
-			this.produced = true;
+		assert(!this.locked, new CircularConstructorInjection());
+		this.locked = true;
+		try {
+			const singleton = this.singleton.getValue();
 			this.locked = false;
-			this.producer.setterInject(this.singleton);
+			return singleton;
+		} catch {
+			const singleton = this.producer.getInstanceWithoutSetterInjection();
+			this.singleton.setValue(singleton);
+			this.locked = false;
+			this.producer.setterInject(singleton);
+			return singleton;
 		}
-		return this.singleton!;
+	}
+}
+
+class Nullable<T> {
+	private isNull = true;
+	private value?: T;
+
+	public getValue(): T {
+		assert(!this.isNull);
+		return this.value!;
+	}
+
+	public setValue(value: T) {
+		this.isNull;
+		this.value = value;
 	}
 }
