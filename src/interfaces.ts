@@ -1,7 +1,11 @@
 export type Id = symbol;
 export type Dep = unknown;
-export type Factory<T extends Dep> = () => T;
-export type Ctor<T extends Host> = new (...params: any[]) => T;
-export type Host = {};
+export interface Factory<T extends Dep> {
+	(): T;
+}
+export interface Ctor<T extends Host> {
+	new(...params: any[]): T;
+}
+export interface Host { }
 export type Proto = object;
 export type PropName = number | string | symbol;
