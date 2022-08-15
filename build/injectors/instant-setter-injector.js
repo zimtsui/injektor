@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.instantSetterInjector = exports.InstantSetterInjector = void 0;
+exports.instantSetterInjector = void 0;
 const exceptions_1 = require("../exceptions");
 const assert = require("assert");
 class InstantSetterInjector {
@@ -50,6 +50,5 @@ class InstantSetterInjector {
         return marks;
     }
 }
-exports.InstantSetterInjector = InstantSetterInjector;
 exports.instantSetterInjector = new InstantSetterInjector();
 //# sourceMappingURL=instant-setter-injector.js.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lazySetterInjector = exports.LazySetterInjector = void 0;
+exports.lazySetterInjector = void 0;
 const exceptions_1 = require("../exceptions");
 const assert = require("assert");
 class LazySetterInjector {
@@ -41,6 +41,5 @@ class LazySetterInjector {
         return host;
     }
 }
-exports.LazySetterInjector = LazySetterInjector;
 exports.lazySetterInjector = new LazySetterInjector();
 //# sourceMappingURL=lazy-setter-injection.js.map

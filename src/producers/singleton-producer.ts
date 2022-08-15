@@ -6,7 +6,7 @@ import assert = require('assert');
 
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{
-	private singleton = new Nullable<T>;
+	private singleton = new Nullable<T>();
 	private locked = false;
 
 	public constructor(
@@ -40,7 +40,7 @@ class Nullable<T> {
 	}
 
 	public setValue(value: T) {
-		this.isNull;
+		this.isNull = false;
 		this.value = value;
 	}
 }

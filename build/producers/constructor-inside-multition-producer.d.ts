@@ -5,7 +5,6 @@ export declare class ConstructorInsideMultitionProducer<T extends Host> implemen
     private ctor;
     private factoryProducer;
     constructor(ctor: Ctor<T>, container: ContainerLike);
-    duplicate(container: ContainerLike): ConstructorInsideMultitionProducer<T>;
     getInstance(): T;
     getInstanceWithoutSetterInjection(): T;
     setterInject(instance: T): T;

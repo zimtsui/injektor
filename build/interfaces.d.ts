@@ -3,3 +3,5 @@ export declare type Dep = unknown;
 export declare type Factory<T extends Dep> = () => T;
 export declare type Ctor<T extends Host> = new (...params: any[]) => T;
 export declare type Host = {};
+export declare type Proto = object;
+export declare type PropName = number | string | symbol;

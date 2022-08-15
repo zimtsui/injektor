@@ -8,9 +8,6 @@ class FactoryInsideMultitionProducer {
         this.factory = factory;
         this.container = container;
     }
-    duplicate(container) {
-        return new FactoryInsideMultitionProducer(this.factory, container);
-    }
     getInstance() {
         const instance = this.getInstanceWithoutSetterInjection();
         return this.setterInject(instance);

@@ -7,10 +7,6 @@ class ConstructorInsideSingletonProducer extends singleton_producer_1.SingletonP
     constructor(ctor, container) {
         const producer = new constructor_inside_multition_producer_1.ConstructorInsideMultitionProducer(ctor, container);
         super(producer);
-        this.ctor = ctor;
-    }
-    duplicate(container) {
-        return new ConstructorInsideSingletonProducer(this.ctor, container);
     }
 }
 exports.ConstructorInsideSingletonProducer = ConstructorInsideSingletonProducer;

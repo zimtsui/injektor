@@ -8,9 +8,6 @@ class ValueProducer {
     getInstance() {
         return this.value;
     }
-    duplicate() {
-        return new ValueProducer(this.value);
-    }
 }
 exports.ValueProducer = ValueProducer;
 //# sourceMappingURL=value-producer.js.map
