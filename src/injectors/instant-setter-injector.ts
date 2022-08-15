@@ -1,20 +1,17 @@
-import { SetterInjectorLike } from './setter-injection-like';
 import { NotSetterInjected, NotRegistered } from '../exceptions';
 import {
 	Id,
 	Dep,
 	Host,
-} from '../interfaces';
-import {
 	PropName,
 	Proto,
-} from './injector-like';
+} from '../interfaces';
 import { ContainerLike } from '../container/container-like';
 import assert = require('assert');
 
 
 
-export class InstantSetterInjector implements SetterInjectorLike {
+export class InstantSetterInjector {
 	private table = new WeakMap<Proto, Marks>();
 
 	public decorator = (id: Id) => (
