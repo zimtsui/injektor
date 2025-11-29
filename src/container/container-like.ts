@@ -1,10 +1,4 @@
-import {
-	Id,
-	Dep,
-	Factory,
-	Ctor,
-	Host,
-} from '../interfaces';
+import { type Id, type Dep, type Factory, type Ctor, type Host } from '../interfaces.ts';
 
 
 export abstract class ContainerLike {

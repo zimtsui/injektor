@@ -1,10 +1,7 @@
-import { SingletonProducer } from './singleton-producer';
-import {
-	Dep,
-	Factory,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import { FactoryInsideMultitionProducer } from './factory-inside-multition-producer';
+import { SingletonProducer } from './singleton-producer.ts';
+import { type Dep, type Factory } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import { FactoryInsideMultitionProducer } from './factory-inside-multition-producer.ts';
 
 
 export class FactoryInsideSingletonProducer<T extends Dep> extends SingletonProducer<T> {

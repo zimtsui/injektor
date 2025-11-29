@@ -1,13 +1,7 @@
-import {
-	Id,
-	Host,
-	Ctor,
-	Dep,
-	PropName,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import assert = require('assert');
-import { NotRegistered, NotContructorInjected } from '../exceptions';
+import { type Id, type Host, type Ctor, type Dep, type PropName } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import assert from 'assert';
+import { NotRegistered, NotContructorInjected } from '../exceptions.ts';
 
 
 type ParamMap = Map<number, Id>;

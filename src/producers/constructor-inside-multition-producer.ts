@@ -1,11 +1,8 @@
-import { MultitionProducerLike } from './multition-producer-like';
-import {
-	Host,
-	Ctor,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import { FactoryInsideMultitionProducer } from './factory-inside-multition-producer';
-import { constructorInjector } from '../injectors/constructor-injector';
+import { type MultitionProducerLike } from './multition-producer-like.ts';
+import { type Host, type Ctor } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import { FactoryInsideMultitionProducer } from './factory-inside-multition-producer.ts';
+import { constructorInjector } from '../injectors/constructor-injector.ts';
 
 
 export class ConstructorInsideMultitionProducer<T extends Host> implements MultitionProducerLike<T> {

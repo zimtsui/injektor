@@ -1,17 +1,11 @@
-import { ContainerLike } from './container-like';
-import { FactoryInsideMultitionProducer } from '../producers/factory-inside-multition-producer';
-import { ConstructorInsideMultitionProducer } from '../producers/constructor-inside-multition-producer';
-import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer';
-import { ConstructorInsideSingletonProducer } from '../producers/constructor-inside-singleton-producer';
-import { ValueProducer } from '../producers/value-producer';
-import { ProducerLike } from '../producers/producer-like';
-import {
-	Id,
-	Dep,
-	Factory,
-	Ctor,
-	Host,
-} from '../interfaces';
+import { ContainerLike } from './container-like.ts';
+import { FactoryInsideMultitionProducer } from '../producers/factory-inside-multition-producer.ts';
+import { ConstructorInsideMultitionProducer } from '../producers/constructor-inside-multition-producer.ts';
+import { FactoryInsideSingletonProducer } from '../producers/factory-inside-singleton-producer.ts';
+import { ConstructorInsideSingletonProducer } from '../producers/constructor-inside-singleton-producer.ts';
+import { ValueProducer } from '../producers/value-producer.ts';
+import { type ProducerLike } from '../producers/producer-like.ts';
+import { type Dep, type Factory, type Ctor, type Host } from '../interfaces.ts';
 
 
 export abstract class BaseContainer extends ContainerLike {

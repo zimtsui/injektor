@@ -1,12 +1,8 @@
-import { MultitionProducerLike } from './multition-producer-like';
-import {
-	Dep,
-	Host,
-	Factory,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import { instantSetterInjector } from '../injectors/instant-setter-injector';
-import { lazySetterInjector } from '../injectors/lazy-setter-injection';
+import { type MultitionProducerLike } from './multition-producer-like.ts';
+import { type Dep, type Host, type Factory } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import { instantSetterInjector } from '../injectors/instant-setter-injector.ts';
+import { lazySetterInjector } from '../injectors/lazy-setter-injection.ts';
 
 
 export class FactoryInsideMultitionProducer<T extends Dep> implements MultitionProducerLike<T> {

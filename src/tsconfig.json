@@ -1,8 +1,25 @@
 {
-	"extends": "../tsconfig-base.json",
 	"compilerOptions": {
+		"target": "ES2022",
+		"module": "preserve",
+		"moduleDetection": "force",
+		"lib": ["esnext"],
+		"sourceMap": true,
+		"strict": true,
+		"experimentalDecorators": true,
+		"noUncheckedIndexedAccess": true,
+		"noUncheckedSideEffectImports": true,
+		"allowSyntheticDefaultImports": true,
+		"rewriteRelativeImportExtensions": true,
+		"allowJs": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"resolveJsonModule": true,
+		"verbatimModuleSyntax": true,
+		"checkJs": true,
 		"composite": true,
-		"outDir": "../build"
+		"outDir": "../build",
+		"skipLibCheck": true
 	},
 	"include": [
 		"./**/*",

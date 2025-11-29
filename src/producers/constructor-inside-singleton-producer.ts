@@ -1,10 +1,7 @@
-import { SingletonProducer } from './singleton-producer';
-import {
-	Host,
-	Ctor,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import { ConstructorInsideMultitionProducer } from './constructor-inside-multition-producer';
+import { SingletonProducer } from './singleton-producer.ts';
+import { type Host, type Ctor } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import { ConstructorInsideMultitionProducer } from './constructor-inside-multition-producer.ts';
 
 
 export class ConstructorInsideSingletonProducer<T extends Host> extends SingletonProducer<T> {

@@ -1,8 +1,8 @@
-import { ProducerLike } from './producer-like';
-import { MultitionProducerLike } from './multition-producer-like';
-import { Dep } from '../interfaces';
-import { CircularConstructorInjection } from '../exceptions';
-import assert = require('assert');
+import { type ProducerLike } from './producer-like.ts';
+import { type MultitionProducerLike } from './multition-producer-like.ts';
+import { type Dep } from '../interfaces.ts';
+import { CircularConstructorInjection } from '../exceptions.ts';
+import assert from 'assert';
 
 
 export abstract class SingletonProducer<T extends Dep> implements ProducerLike<T>{

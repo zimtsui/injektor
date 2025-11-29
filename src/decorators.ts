@@ -1,9 +1,8 @@
-import { instantSetterInjector } from './injectors/instant-setter-injector';
+import { instantSetterInjector } from './injectors/instant-setter-injector.ts';
+import { lazySetterInjector } from './injectors/lazy-setter-injection.ts';
+import { constructorInjector } from './injectors/constructor-injector.ts';
+
 export const instantInject = instantSetterInjector.decorator;
-
-import { lazySetterInjector } from './injectors/lazy-setter-injection';
 export const lazyInject = lazySetterInjector.decorator;
-
-import { constructorInjector } from './injectors/constructor-injector';
 export const inject = constructorInjector.decorator;
 export const injextends = constructorInjector.injextends;

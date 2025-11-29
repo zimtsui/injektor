@@ -1,5 +1,5 @@
-import { ProducerLike } from './producer-like';
-import { Dep } from '../interfaces';
+import { type ProducerLike } from './producer-like.ts';
+import { type Dep } from '../interfaces.ts';
 
 
 export class ValueProducer<T extends Dep> implements ProducerLike<T>{

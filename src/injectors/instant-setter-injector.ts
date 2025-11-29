@@ -1,14 +1,7 @@
-import { NotSetterInjected, NotRegistered } from '../exceptions';
-import {
-	Id,
-	Dep,
-	Host,
-	PropName,
-	Proto,
-} from '../interfaces';
-import { ContainerLike } from '../container/container-like';
-import assert = require('assert');
-
+import { NotSetterInjected, NotRegistered } from '../exceptions.ts';
+import { type Id, type Dep, type Host, type PropName, type Proto } from '../interfaces.ts';
+import { ContainerLike } from '../container/container-like.ts';
+import assert from 'assert';
 
 
 class InstantSetterInjector {

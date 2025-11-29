@@ -2,8 +2,11 @@
   "name": "@zimtsui/injektor",
   "version": "0.0.8",
   "description": "",
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "tsc -b ./test/src/tsconfig.json && ava",
     "build": "tsc -b ./src/tsconfig.json",
@@ -19,6 +22,6 @@
     "assert": "^1.5.0"
   },
   "devDependencies": {
-    "ava": "^4.1.0"
+    "ava": "^6.4.1"
   }
 }
