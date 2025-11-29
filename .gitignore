@@ -1,7 +1,7 @@
 # nodejs
 /node_modules
 /build
-/test
+/test/build
 
 # dia
 /*.dia~
